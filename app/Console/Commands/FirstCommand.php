@@ -23,7 +23,16 @@ class FirstCommand extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+
+    private function YearCheck($name): bool
+    {
+        if ($this->ask("Скільки років {$name}?") < 18 and $this->confirm("Продовжити?") === false) {
+            return false;
+        }
+        return true;
+    }
+
+    public function handle(): void
     {
         $user_data['name'] = $this->argument('name');
 
@@ -32,11 +41,16 @@ class FirstCommand extends Command
             return;
         }
 
-        if ($this->ask("Скільки тобі років {$user_data['name']}?") < 18) {
-            if ($this->confirm("Ви бажаете продовжити?") === false) {
-                $this->error("Бай бай!");
-                return;
-            }
+        /* if ($this->ask("Скільки тобі років {$user_data['name']}?") < 18) {
+             if ($this->confirm("Ви бажаете продовжити?") === false) {
+                 $this->error("Бай бай!");
+                 return;
+             }
+         }*/
+
+        if (!$this->YearCheck($user_data['name'])) {
+            $this->error("Бай бай!");
+            return;
         }
 
         $action = $this->choice('Виберіть дію', ['Читання', 'Запис'], 0);
@@ -46,7 +60,7 @@ class FirstCommand extends Command
             $user_data['city'] = $this->ask("Ваше місто?");
             $user_data['phone'] = $this->ask("Ваше номер телефону?");
             $write = file_put_contents('./file.txt', json_encode($user_data, JSON_UNESCAPED_UNICODE));
-            if($write !== false) {
+            if ($write !== false) {
                 $this->info("Файл успішно збережено!");
                 return;
             }

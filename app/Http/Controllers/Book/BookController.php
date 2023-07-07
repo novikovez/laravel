@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Book;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Book\BookShowRequest;
 use App\Http\Requests\Book\BookStoreRequest;
-use App\Http\Resources\BookResource;
-use Illuminate\Http\JsonResponse;
+use App\Http\Resources\Book\BookStoreResource;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -15,29 +16,29 @@ class BookController extends Controller
      */
     public function index()
     {
-        $data = [
-            'message' => 'Пример ответа API',
-            'data' => ['foo' => 'bar'],
-        ];
-        return response()->json($data);
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(BookStoreRequest $request): BookResource
+    public function store(BookStoreRequest $request): BookStoreResource
     {
         $data = $request->validated();
-        return new BookResource($request);
+        return new BookStoreResource((object)$data);
 
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id, BookShowRequest $request)
     {
-        return 234;
+        $request->merge([
+            'id' => (int) $request->route('id')
+        ]);
+        $request->validated();
+
     }
 
     /**
