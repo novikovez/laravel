@@ -2,31 +2,29 @@
 
 namespace App\Http\Requests\Book;
 
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class BookShowRequest extends FormRequest
+class BookDestroyRequest extends FormRequest
 {
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
+     * @return array<string, ValidationRule|array|string>
      */
-
-
-
     public function rules(): array
     {
         return [
-            'id' => ['required', 'integer']
+            'id' => ['required', 'integer'],
         ];
     }
 
     public function messages(): array
     {
         return [
-            "id.required" => "Вкажіть ідентифікатор",
-            "id.integer" => "Ідентифікатор повинен бути цілим числом",
+            'id.required' => 'Поле id обов\'язкове для заповнення',
+            'id.integer' => 'Поле id повинно бути цілим числом',
         ];
     }
 
