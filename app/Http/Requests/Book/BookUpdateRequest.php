@@ -27,7 +27,7 @@ class BookUpdateRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'id.required' => 'Поле id обов\'язкове для заповнення',
+            'id.required' => 'Поле ім\'я обов\'язкове для заповнення',
             'id.integer' => 'Поле id повинно бути цілим числом',
             'name.required' => 'Поле ім\'я обов\'язкове для заповнення',
             'name.string' => 'Поле ім\'я повинно бути рядком',
@@ -42,10 +42,10 @@ class BookUpdateRequest extends FormRequest
         ];
     }
 
-    public function validationData(): array
+    protected function prepareForValidation(): void
     {
-        return array_merge($this->all(), [
-            'id' => $this->route('id'),
+        $this->merge([
+            'id' => $this->route('id')
         ]);
     }
 }

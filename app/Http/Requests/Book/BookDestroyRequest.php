@@ -28,10 +28,11 @@ class BookDestroyRequest extends FormRequest
         ];
     }
 
-    public function validationData(): array
+    protected function prepareForValidation(): void
     {
-        return array_merge($this->all(), [
-            'id' => $this->route('id'),
+        $this->merge([
+            'id' => $this->route('id')
         ]);
     }
 }
+
