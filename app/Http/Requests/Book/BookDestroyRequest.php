@@ -31,7 +31,7 @@ class BookDestroyRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'id' => $this->route('id')
+            'id' => $this->route('book')
         ]);
     }
 }

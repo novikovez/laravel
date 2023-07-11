@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Book;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Book\BookDestroyRequest;
+use App\Http\Requests\Book\BookIndexRequest;
 use App\Http\Requests\Book\BookShowRequest;
 use App\Http\Requests\Book\BookStoreRequest;
 use App\Http\Requests\Book\BookUpdateRequest;
@@ -13,24 +14,10 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 class BookController extends Controller
 {
 
-    public function index(): AnonymousResourceCollection
+    public function index(BookIndexRequest $request)
     {
-        return BookResource::collection([
-            (object)[
-                "id" => rand(1, 9),
-                "name" => "Max",
-                "author" => "Maxim",
-                "year" => "22",
-                "countPages" => "1"
-            ],
-            (object)[
-                "id" => rand(1, 9),
-                "name" => "Ivan",
-                "author" => "Ivanov",
-                "year" => "15",
-                "countPages" => "2"
-            ],
-        ]);
+        return $data = $request->validated();
+
     }
 
     public function store(BookStoreRequest $request): BookResource

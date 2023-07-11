@@ -17,22 +17,23 @@ class BookShowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'integer']
+            'startDate' => ['required', 'date'],
+            'endDate' => ['required', 'date', 'gt:startDate']
         ];
     }
 
     public function messages(): array
     {
         return [
-            "id.required" => "Вкажіть ідентифікатор",
-            "id.integer" => "Ідентифікатор повинен бути цілим числом",
+            "startDate.required" => "Вкажіть дату",
+            "startDate.date" => "Вкажіть корректну дату",
         ];
     }
 
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'id' => $this->route('id')
+            'id' => $this->route('book')
         ]);
     }
 }
