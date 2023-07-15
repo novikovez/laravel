@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Book;
+namespace App\Http\Requests\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BookShowRequest extends FormRequest
+class CategoryShowRequest extends FormRequest
 {
 
     /**
@@ -17,7 +17,7 @@ class BookShowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'integer', 'exists:books,id'],
+            'id' => ['required', 'integer', 'exists:categories,id'],
         ];
     }
 
@@ -33,7 +33,7 @@ class BookShowRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'id' => $this->route('book')
+            'id' => $this->route('category')
         ]);
     }
 }

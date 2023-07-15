@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Book;
+namespace App\Http\Requests\Category;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class BookDestroyRequest extends FormRequest
+class CategoryDestroyRequest extends FormRequest
 {
 
     /**
@@ -16,7 +16,7 @@ class BookDestroyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'integer', 'exists:books'],
+            'id' => ['required', 'integer', 'exists:categories'],
         ];
     }
 
@@ -32,7 +32,7 @@ class BookDestroyRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'id' => $this->route('book')
+            'id' => $this->route('category')
         ]);
     }
 }
