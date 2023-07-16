@@ -36,7 +36,7 @@ class BookController extends Controller
                     $data['startDate'],
                     $data['endDate'],
                     $data['year'],
-                    $data['lang']
+                    LangEnum::tryFrom($data['lang']),
                 )
             )
         );
