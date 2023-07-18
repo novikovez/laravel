@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->string("name", 255)->unique();
+            $table->string("name", 255);
             $table->unsignedInteger("year");
             $table->enum("lang", ['en', 'ua', 'pl', 'de']);
             $table->integer("pages");

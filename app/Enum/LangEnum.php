@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Enum;
+namespace App\Enum;
 
 enum LangEnum: string
 {
@@ -8,4 +8,14 @@ enum LangEnum: string
     case PL = 'pl';
     case UA = 'ua';
     case DE = 'de';
+
+    public static function getValues(): array
+    {
+        return [
+            self::EN,
+            self::PL,
+            self::UA,
+            self::DE,
+        ];
+    }
 }
