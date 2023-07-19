@@ -10,16 +10,17 @@ use Faker\Factory as Faker;
 
 class CreateBooks extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-
     public function run(): void
     {
+        DB::disableQueryLog();
+        $dispatcher = DB::connection()->getEventDispatcher();
+        DB::connection()->unsetEventDispatcher();
+
         $faker = Faker::create();
 
-        $arrays = array_chunk(range(1, 100000), 500);
+        $arrays = array_chunk(range(1, 100000), 5000);
         foreach ($arrays as $items) {
+            $books = [];
             foreach ($items as $item) {
                 $books[] = [
                     'name' => $faker->slug(1),
@@ -31,11 +32,10 @@ class CreateBooks extends Seeder
                 ];
             }
             DB::table('books')->insert($books);
-            echo $sizeInBytes = memory_get_usage(true) / 1048576;
-            echo PHP_EOL;
-            echo count($books);
-            echo PHP_EOL;
             unset($books);
         }
+        DB::enableQueryLog();
+        DB::connection()->setEventDispatcher($dispatcher);
     }
+
 }
