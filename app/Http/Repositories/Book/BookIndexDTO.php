@@ -11,8 +11,17 @@ class BookIndexDTO
         protected string  $endDate,
         protected ?int    $year,
         protected ?LangEnum $lang,
+        protected ?int $lastId,
     )
     {
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLastId(): ?int
+    {
+        return $this->lastId;
     }
 
     /**

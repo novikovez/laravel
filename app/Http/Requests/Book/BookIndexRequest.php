@@ -22,6 +22,7 @@ class BookIndexRequest extends FormRequest
             'endDate' => ["required", "date_format:Y.m.d", "after:startDate"],
             "year" => ["sometimes", "integer", "nullable", "between:1970," . date('Y')],
             "lang" => ["sometimes", "string", "max:2", new Enum(LangEnum::class), "nullable"],
+            "lastId" => ["sometimes", "integer", "nullable"],
         ];
     }
 
@@ -49,6 +50,9 @@ class BookIndexRequest extends FormRequest
         }
         if ($this->missing('year')) {
             $this->merge(['year' => null]);
+        }
+        if ($this->missing('lastId')) {
+            $this->merge(['lastId' => null]);
         }
     }
 }

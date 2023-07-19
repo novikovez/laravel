@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Repositories\Book\BookIndexDTO;
 use App\Http\Repositories\Book\BookStoreDTO;
 use App\Http\Repositories\Book\BookUpdateDTO;
+use App\Http\Repositories\Book\Iterators\BookIterator;
 use App\Http\Requests\Book\BookDestroyRequest;
 use App\Http\Requests\Book\BookIndexRequest;
 use App\Http\Requests\Book\BookShowRequest;
@@ -17,6 +18,8 @@ use App\Http\Services\Book\BookServices;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -37,6 +40,7 @@ class BookController extends Controller
                     $data['endDate'],
                     $data['year'],
                     LangEnum::tryFrom($data['lang']),
+                    $data['lastId'],
                 )
             )
         );

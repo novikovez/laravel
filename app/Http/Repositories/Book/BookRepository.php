@@ -34,12 +34,21 @@ class BookRepository
         $query->when($bookIndexDTO->getYear() !== null, function ($q) use ($bookIndexDTO) {
             return $q->where('year', '=', $bookIndexDTO->getYear());
         });
+        $query->when($bookIndexDTO->getLastId() !== null, function ($q) use ($bookIndexDTO) {
+            return $q->where('books.id', '>', $bookIndexDTO->getLastId());
+        });
+        $query
+            ->limit(100)
+            ->orderBy('books.id', 'asc');
+
         $booksData = collect($query->get());
         return $booksData->map(function ($bookData) {
             return new BookIterator($bookData);
         });
 
+
     }
+
 
     public function store(BookStoreDTO $bookStoreDTO): int
     {
