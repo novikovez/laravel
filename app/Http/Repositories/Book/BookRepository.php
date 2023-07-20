@@ -94,6 +94,7 @@ class BookRepository
     public function updateLang(): string
     {
         DB::table('books')
+            ->where('lang', '=', 'de')
             ->chunkById(5000, function () {
                 DB::table('books')
                     ->update(['lang' => 'pl']);
