@@ -95,9 +95,12 @@ class BookRepository
     {
         DB::table('books')
             ->where('lang', '=', 'de')
-            ->chunkById(5000, function () {
-                DB::table('books')
-                    ->update(['lang' => 'pl']);
+            ->chunkById(500, function (Collection $users) {
+                foreach ($users as $user) {
+                    DB::table('books')
+                        ->where('id', $user->id)
+                        ->update(['lang' => 'ua']);
+                }
             });
         return json_encode('Language Updated');
     }
