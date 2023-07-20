@@ -8,6 +8,7 @@ use App\Http\Repositories\Book\BookIndexDTO;
 use App\Http\Repositories\Book\BookStoreDTO;
 use App\Http\Repositories\Book\BookUpdateDTO;
 use App\Http\Repositories\Book\Iterators\BookIterator;
+use App\Http\Requests\Book\BookAllRequest;
 use App\Http\Requests\Book\BookDestroyRequest;
 use App\Http\Requests\Book\BookIndexRequest;
 use App\Http\Requests\Book\BookShowRequest;
@@ -92,5 +93,21 @@ class BookController extends Controller
         $data = $request->validated();
         $this->bookServices->destroy($data['id']);
         return $this->getNoContentResponse();
+    }
+
+    public function all(BookIndexRequest $request): AnonymousResourceCollection
+    {
+        $data = $request->validated();
+        return BookResource::collection(
+            $this->bookServices->index(
+                new BookIndexDTO(
+                    $data['startDate'],
+                    $data['endDate'],
+                    $data['year'],
+                    LangEnum::tryFrom($data['lang']),
+                    $data['lastId'],
+                )
+            )
+        );
     }
 }

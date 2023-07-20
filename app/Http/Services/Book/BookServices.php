@@ -47,4 +47,10 @@ class BookServices
         return $this->bookRepository->index($bookIndexDTO);
 
     }
+
+    public function all(BookIndexDTO $bookIndexDTO): Collection
+    {
+        return $this->bookRepository->index($bookIndexDTO);
+
+    }
 }

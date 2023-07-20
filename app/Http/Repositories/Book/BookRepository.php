@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Http\Repositories\Book;
+namespace App\Http\Repositories\Book;
 
 use App\Http\Repositories\Book\Iterators\BookIterator;
 use Illuminate\Support\Collection;
@@ -35,13 +35,11 @@ class BookRepository
             return $q->where('year', '=', $bookIndexDTO->getYear());
         });
         $query->when($bookIndexDTO->getLastId() !== null, function ($q) use ($bookIndexDTO) {
-            return $q->where('books.id', '>', $bookIndexDTO->getLastId());
+            return $q->where('books.id', '>', $bookIndexDTO->getLastId())->limit(100);
         });
-        $query
-            ->limit(100)
-            ->orderBy('books.id', 'asc');
 
-        $booksData = collect($query->get());
+
+        $booksData = collect($query->limit(100000)->get());
         return $booksData->map(function ($bookData) {
             return new BookIterator($bookData);
         });
@@ -97,6 +95,50 @@ class BookRepository
     public function destroy($id): int
     {
         return DB::table('books')->delete($id);
+    }
+
+    public function getAllBooks()
+    {
+//        $da = DB::table('books')
+//            ->select([
+//                "books.id as bookId",
+//                "books.name",
+//                "year",
+//                "lang",
+//                "pages",
+//                "books.created_at",
+//                "category_id",
+//                "categories.name as category_name",
+//            ])
+//            ->join('categories', 'categories.id', '=', 'books.category_id')
+//            ->chunkById(100, function (Collection $books) {
+//                foreach($books as $book) {
+//                    return collect($book);
+//
+//                }
+//            }, 'books.id', 'bookId');
+//        return $da;
+        $query = DB::table('books');
+        $query->select(
+                [
+                    "books.id",
+                    "books.name",
+                    "year",
+                    "lang",
+                    "pages",
+                    "books.created_at",
+                    "category_id",
+                    "categories.name as category_name",
+                ]
+            )
+            ->join('categories', 'categories.id', '=', 'books.category_id')
+            ->where('year', '2011')
+            ->chunkById(10000, function ($books) use (&$processedUsers) {
+                foreach ($books as $book) {
+                    $processedUsers[] = new BookIterator($book);
+                }
+            }, 'books.id', 'id');
+        return $processedUsers;
     }
 
 }
