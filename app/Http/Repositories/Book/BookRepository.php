@@ -35,16 +35,10 @@ class BookRepository
             return $q->where('year', '=', $bookIndexDTO->getYear());
         });
         $query->when($bookIndexDTO->getLastId() !== null, function ($q) use ($bookIndexDTO) {
-            return $q->where('books.id', '>', $bookIndexDTO->getLastId())->limit(100);
+            return $q->where('books.id', '>', $bookIndexDTO->getLastId());
         });
 
-
-        $booksData = collect($query->limit(100000)->get());
-        return $booksData->map(function ($bookData) {
-            return new BookIterator($bookData);
-        });
-
-
+        return collect($query->limit(100)->get());
     }
 
 
@@ -97,48 +91,14 @@ class BookRepository
         return DB::table('books')->delete($id);
     }
 
-    public function getAllBooks()
+    public function updateLang(): string
     {
-//        $da = DB::table('books')
-//            ->select([
-//                "books.id as bookId",
-//                "books.name",
-//                "year",
-//                "lang",
-//                "pages",
-//                "books.created_at",
-//                "category_id",
-//                "categories.name as category_name",
-//            ])
-//            ->join('categories', 'categories.id', '=', 'books.category_id')
-//            ->chunkById(100, function (Collection $books) {
-//                foreach($books as $book) {
-//                    return collect($book);
-//
-//                }
-//            }, 'books.id', 'bookId');
-//        return $da;
-        $query = DB::table('books');
-        $query->select(
-                [
-                    "books.id",
-                    "books.name",
-                    "year",
-                    "lang",
-                    "pages",
-                    "books.created_at",
-                    "category_id",
-                    "categories.name as category_name",
-                ]
-            )
-            ->join('categories', 'categories.id', '=', 'books.category_id')
-            ->where('year', '2011')
-            ->chunkById(10000, function ($books) use (&$processedUsers) {
-                foreach ($books as $book) {
-                    $processedUsers[] = new BookIterator($book);
-                }
-            }, 'books.id', 'id');
-        return $processedUsers;
+        DB::table('books')
+            ->chunkById(5000, function () {
+                DB::table('books')
+                    ->update(['lang' => 'pl']);
+            });
+        return json_encode('Language Updated');
     }
 
 }

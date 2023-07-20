@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::get('/books/all', [BookController::class, 'all']);
+Route::get('/books/updateLang', [BookController::class, 'updateLang']);
 
 Route::apiResource('/books', BookController::class);
 Route::apiResource('/categories', CategoryController::class);

@@ -95,19 +95,8 @@ class BookController extends Controller
         return $this->getNoContentResponse();
     }
 
-    public function all(BookIndexRequest $request): AnonymousResourceCollection
+    public function updateLang(): string
     {
-        $data = $request->validated();
-        return BookResource::collection(
-            $this->bookServices->index(
-                new BookIndexDTO(
-                    $data['startDate'],
-                    $data['endDate'],
-                    $data['year'],
-                    LangEnum::tryFrom($data['lang']),
-                    $data['lastId'],
-                )
-            )
-        );
+        return $this->bookServices->updateLang();
     }
 }
