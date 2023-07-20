@@ -44,7 +44,17 @@ class BookServices
 
     public function index(BookIndexDTO $bookIndexDTO): Collection
     {
-        return $this->bookRepository->index($bookIndexDTO);
+        $data = $this->bookRepository->index($bookIndexDTO);
+        return $data->map(function ($bookData) {
+            return new BookIterator($bookData);
+        });
+
+
+    }
+
+    public function updateLang(): string
+    {
+        return $this->bookRepository->updateLang();
 
     }
 }

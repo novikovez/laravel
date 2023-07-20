@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Repositories\Book;
+namespace App\Http\Repositories\Book\DTO;
 
-use app\Enum\LangEnum;
+use App\Enum\LangEnum;
 
 class BookIndexDTO
 {

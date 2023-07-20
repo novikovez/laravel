@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Book\BookController;
 use App\Http\Controllers\Category\CategoryController;
+use App\Http\Repositories\Book\BookRepository;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::get('/books/updateLang', [BookController::class, 'updateLang']);
 
 Route::apiResource('/books', BookController::class);
 Route::apiResource('/categories', CategoryController::class);

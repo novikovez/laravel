@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Http\Repositories\Book;
+namespace App\Http\Repositories\Book;
 
 use App\Http\Repositories\Book\Iterators\BookIterator;
 use Illuminate\Support\Collection;
@@ -34,12 +34,13 @@ class BookRepository
         $query->when($bookIndexDTO->getYear() !== null, function ($q) use ($bookIndexDTO) {
             return $q->where('year', '=', $bookIndexDTO->getYear());
         });
-        $booksData = collect($query->get());
-        return $booksData->map(function ($bookData) {
-            return new BookIterator($bookData);
+        $query->when($bookIndexDTO->getLastId() !== null, function ($q) use ($bookIndexDTO) {
+            return $q->where('books.id', '>', $bookIndexDTO->getLastId());
         });
 
+        return collect($query->limit(100)->get());
     }
+
 
     public function store(BookStoreDTO $bookStoreDTO): int
     {
@@ -88,6 +89,16 @@ class BookRepository
     public function destroy($id): int
     {
         return DB::table('books')->delete($id);
+    }
+
+    public function updateLang(): string
+    {
+        DB::table('books')
+            ->chunkById(5000, function () {
+                DB::table('books')
+                    ->update(['lang' => 'pl']);
+            });
+        return json_encode('Language Updated');
     }
 
 }

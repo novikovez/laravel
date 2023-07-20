@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
-class BookIndexRequest extends FormRequest
+class BookAllRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -22,7 +22,6 @@ class BookIndexRequest extends FormRequest
             'endDate' => ["required", "date_format:Y.m.d", "after:startDate"],
             "year" => ["sometimes", "integer", "nullable", "between:1970," . date('Y')],
             "lang" => ["sometimes", "string", "max:2", new Enum(LangEnum::class), "nullable"],
-            "lastId" => ["sometimes", "integer", "nullable"],
         ];
     }
 
