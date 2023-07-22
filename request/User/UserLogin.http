@@ -1,0 +1,8 @@
+POST http://laravel.project/api/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "mail@mail.com",
+    "password": "123456789"
+}
