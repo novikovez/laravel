@@ -20,7 +20,6 @@ class UserResource extends JsonResource
         return [
             'id' => $resource->getId(),
             'email' => $resource->getEmail(),
-            'Bearer' => $resource->getToken(),
         ];
     }
 }
