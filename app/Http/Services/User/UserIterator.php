@@ -2,19 +2,15 @@
 
 namespace App\Http\Services\User;
 
-use Laravel\Passport\PersonalAccessTokenResult;
-
 class UserIterator {
 
     protected int $id;
     protected string $email;
-    protected PersonalAccessTokenResult $token;
 
     public function __construct(object $data)
     {
-        $this->id = $data['token']->token->user_id;
-        $this->email = $data['email'];
-        $this->token = $data['token'];
+        $this->id = $data->id;
+        $this->email = $data->email;
     }
 
     /**
@@ -33,11 +29,4 @@ class UserIterator {
         return $this->email;
     }
 
-    /**
-     * @return PersonalAccessTokenResult
-     */
-    public function getToken(): PersonalAccessTokenResult
-    {
-        return $this->token;
-    }
 }

@@ -24,4 +24,8 @@ class Controller extends BaseController
         return response(null, 204);
     }
 
+    public function getBadAuthResponse(): Response
+    {
+        return response('Bad Auth Data', 422);
+    }
 }
