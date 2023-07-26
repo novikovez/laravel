@@ -19,7 +19,8 @@ class UserController extends Controller
         if($result === false) {
             return $this->getBadAuthResponse();
         }
-        return $result;
-
+        $resource = new UserResource($result);
+        $resource->additional(['Bearer' => $service->getToken()]);
+        return $resource;
     }
 }

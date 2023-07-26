@@ -13,32 +13,27 @@ class UserLoginService
     )
     {
     }
-    public function login($data): false|UserResource
+    public function login($data): false|UserIterator
     {
 
         if(auth()->attempt($data) === false) {
             return false;
         }
 
-        $token = auth()
-            ->user()
-            ->createToken(config('app.name'));
-
-
-        $userResource = new UserResource(
-            $this->getById(
-                auth()->user()->id
-            )
+        return $this->getById(
+            auth()->user()->id
         );
-
-        return $userResource->additional([
-            'Bearer' => $token,
-        ]);
-
     }
 
     private function getById($id): UserIterator
     {
         return $this->repository->getById($id);
+    }
+
+    public function getToken()
+    {
+        return auth()
+            ->user()
+            ->createToken(config('app.name'));
     }
 }
