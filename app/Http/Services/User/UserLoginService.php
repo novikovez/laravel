@@ -4,30 +4,26 @@ namespace App\Http\Services\User;
 
 use App\Http\Repositories\User\UsersRepository;
 use App\Http\Resources\User\UserResource;
+use App\Http\Services\User\UserAuthService;
 
 class UserLoginService
 {
 
     public function __construct(
-        protected UsersRepository $repository
+        protected UserAuthService $userAuthService,
     )
     {
     }
+
     public function login($data): false|UserIterator
     {
 
-        if(auth()->attempt($data) === false) {
+        if($this->userAuthService->login($data) === false) {
             return false;
         }
+        $userId = $this->userAuthService->getUserId();
+        return $this->userAuthService->getById($userId);
 
-        return $this->getById(
-            auth()->user()->id
-        );
-    }
-
-    private function getById($id): UserIterator
-    {
-        return $this->repository->getById($id);
     }
 
     public function getToken()
