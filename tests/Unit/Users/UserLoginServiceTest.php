@@ -2,11 +2,8 @@
 
 namespace Unit\Users;
 
-use App\Http\Repositories\User\UsersRepository;
 use App\Http\Services\User\UserAuthService;
 use App\Http\Services\User\UserIterator;
-use Illuminate\Support\Collection;
-use Illuminate\Support\ServiceProvider;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Tests\TestCase;
@@ -19,25 +16,6 @@ class UserLoginServiceTest extends TestCase
     protected UserLoginService $service;
     protected MockObject $userAuthService;
     protected MockObject $userIterator;
-
-
-
-    public static function provideDataForUser(): array
-    {
-        return [
-            [
-                ['email' => 'mail@mai1l.com', 'password' => '1234561789'],
-                'result' => false,
-                'expected' => false,
-            ],
-            [
-                ['email' => 'mail@mail.com', 'password' => '123456789'],
-                'result' => true,
-                'expected' => true,
-            ],
-        ];
-    }
-
 
     /**
      * @throws Exception
@@ -52,7 +30,7 @@ class UserLoginServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider provideDataForUser
+     * @dataProvider Tests\Unit\Users\DataProviders\provideDataForUser::UserLoginServiceTest()
      */
     public function testUserLoginService(array $data, bool $result, bool $expected): void
     {

@@ -1,23 +1,23 @@
 <?php
 
-namespace Unit\Users\DataProviders;
+namespace Tests\Unit\Users\DataProviders;
 
-use App\Http\Repositories\User\UsersRepository;
-use App\Http\Services\User\UserLoginService;
-use PHPUnit\Framework\MockObject\Exception;
-use PHPUnit\Framework\TestCase;
-
-class provideDataForUser extends TestCase
+class provideDataForUser
 {
 
     public function UserLoginServiceTest(): array
     {
         return [
             [
-                'email' => 'mail@mail.com',
-                'password' => '1234567891',
+                ['email' => 'mail@mai1l.com', 'password' => '1234561789'],
+                'result' => false,
+                'expected' => false,
             ],
-            false,
+            [
+                ['email' => 'mail@mail.com', 'password' => '123456789'],
+                'result' => true,
+                'expected' => true,
+            ],
         ];
     }
 }

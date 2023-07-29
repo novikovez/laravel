@@ -2,24 +2,20 @@
 
 namespace App\Http\Services\DZ11;
 
+use App\Http\Services\DZ11\Methods\lessTen;
+
 class cService
 {
+    public function __construct(
+        protected lessTen $lessTen,
+    )
+    {
+    }
 
     public function cService($data): int
     {
-        return $this->count($data);
+        $result = $this->lessTen->getLessTenInt($data);
+        return count($result);
     }
 
-    public function count($numbers): int
-    {
-        $count = 0;
-
-        foreach ($numbers as $number) {
-            if ($number < 10) {
-                $count++;
-            }
-        }
-
-        return $count;
-    }
 }

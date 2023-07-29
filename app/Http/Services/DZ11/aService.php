@@ -2,23 +2,21 @@
 
 namespace App\Http\Services\DZ11;
 
+use App\Http\Services\DZ11\Methods\evenNumber;
+
 class aService
 {
 
-    public function aService($data) {
-        return $this->count($data);
-    }
-
-    public function count($numbers): int
+    public function __construct(
+        protected evenNumber $evenNumber,
+    )
     {
-        $count = 0;
-
-        foreach ($numbers as $number) {
-            if ($number % 2 === 0) {
-                $count++;
-            }
-        }
-
-        return $count;
     }
+
+    public function aService($data): int
+    {
+      $result = $this->evenNumber->getEvenInt($data);
+      return count($result);
+    }
+
 }

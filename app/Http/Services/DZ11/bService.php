@@ -2,23 +2,21 @@
 
 namespace App\Http\Services\DZ11;
 
+use App\Http\Services\DZ11\Methods\oddNumber;
+
 class bService
 {
-
-    public function bService($data) {
-        return $this->count($data);
-    }
-
-    public function count($numbers): int
+    public function __construct(
+        protected oddNumber $oddNumber
+    )
     {
-        $count = 0;
-
-        foreach ($numbers as $number) {
-            if ($number % 2 !== 0) {
-                $count++;
-            }
-        }
-
-        return $count;
     }
+
+    public function bService($data): int
+    {
+        $result = $this->oddNumber->getOddInt($data);
+        return count($result);
+    }
+
+
 }
