@@ -30,7 +30,7 @@ class UserLoginServiceTest extends TestCase
     }
 
     /**
-     * @dataProvider Tests\Unit\Users\DataProviders\provideDataForUser::UserLoginServiceTest()
+     * @dataProvider Tests\Unit\Users\DataProviders\provideDataForUser::LoginServiceTest()
      */
     public function testUserLoginService(array $data, bool $result, bool $expected): void
     {
