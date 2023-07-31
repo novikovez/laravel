@@ -61,7 +61,7 @@ class UserLoginPipelineTest extends TestCase
         $this->pipeline
             ->method('send')
             ->with($dto)
-            ->willReturnSelf($this->pipeline);
+            ->willReturnSelf();
 
         $this->pipeline
             ->method('through')
@@ -74,7 +74,6 @@ class UserLoginPipelineTest extends TestCase
 
 
         $result = $this->loginService->handle($dto);
-        var_dump($result);
         $this->assertNull($result->getUserId());
     }
 }

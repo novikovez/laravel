@@ -6,6 +6,7 @@ use App\Http\Services\User\Login\LoginDTO;
 use App\Http\Services\User\Login\LoginInterface;
 use Closure;
 
+
 class CheckValidDataHandle implements LoginInterface
 {
 
@@ -15,10 +16,22 @@ class CheckValidDataHandle implements LoginInterface
             'email' => $loginDTO->getEmail(),
             'password' => $loginDTO->getPassword(),
         ];
-        if(auth()->attempt($data) === false)
-        {
+
+        if($this->checkAuth($data) === false){
             return $loginDTO;
         }
+
         return $next($loginDTO);
+    }
+
+
+    protected function checkAuth($data): bool
+    {
+        if(auth()->attempt($data) === false)
+        {
+            return false;
+        }
+
+        return true;
     }
 }
