@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\User;
 
+use App\Http\Services\User\Login\LoginDTO;
 use App\Http\Services\User\UserIterator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -15,10 +16,10 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        /** @var UserIterator $resource */
+        /** @var LoginDTO $resource */
         $resource = $this->resource;
         return [
-            'id' => $resource->getId(),
+            'id' => $resource->getUserId(),
             'email' => $resource->getEmail(),
         ];
     }
