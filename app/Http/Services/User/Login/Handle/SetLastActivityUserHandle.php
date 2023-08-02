@@ -20,7 +20,7 @@ class SetLastActivityUserHandle implements LoginInterface
     {
 
         $this->setActivityRepository->setUserActivity(
-            $loginDTO->getUserId()->getId(),
+            $loginDTO->getUserId(),
             request()->ip()
         );
         return $next($loginDTO);

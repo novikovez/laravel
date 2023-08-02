@@ -20,9 +20,9 @@ class SetAuthUserServiceHandle implements LoginInterface
     public function handle(LoginDTO $loginDTO, Closure $next): LoginDTO
     {
         $userId = $this->usersRepository->getById(
-            $this->getUserID->getUserId()
+           $this->getUserID->getUserId()
         );
-        $loginDTO->setUserId($userId);
+        $loginDTO->setUserId($userId->getId());
         return $next($loginDTO);
     }
 }

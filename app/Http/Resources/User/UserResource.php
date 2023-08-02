@@ -19,7 +19,7 @@ class UserResource extends JsonResource
         /** @var LoginDTO $resource */
         $resource = $this->resource;
         return [
-            'id' => $resource->getUserId()->getId(),
+            'id' => $resource->getUserId(),
             'email' => $resource->getEmail(),
         ];
     }

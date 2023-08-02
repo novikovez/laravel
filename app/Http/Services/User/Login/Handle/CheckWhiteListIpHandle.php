@@ -18,12 +18,14 @@ class CheckWhiteListIpHandle implements LoginInterface
     public function handle(LoginDTO $loginDTO, Closure $next): LoginDTO
     {
         $result = $this->whiteListIpRepository->checkUserIp(
-            $loginDTO->getUserId()->getId(),
+            $loginDTO->getUserId(),
             request()->ip()
         );
         if($result === false) {
+            $loginDTO->setResult(false);
             return $loginDTO;
         }
+        $loginDTO->setResult(true);
         return $next($loginDTO);
     }
 }

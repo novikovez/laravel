@@ -7,7 +7,7 @@ use Laravel\Passport\PersonalAccessTokenResult;
 
 class LoginDTO
 {
-    protected ?UserIterator $userId = null;
+    protected int $userId;
     protected PersonalAccessTokenResult $token;
     protected bool $result;
 
@@ -51,17 +51,17 @@ class LoginDTO
     }
 
     /**
-     * @return UserIterator|null
+     * @return int
      */
-    public function getUserId(): UserIterator|null
+    public function getUserId(): int
     {
         return $this->userId;
     }
 
     /**
-     * @param UserIterator $userId
+     * @param int $userId
      */
-    public function setUserId(UserIterator $userId): void
+    public function setUserId(int $userId): void
     {
         $this->userId = $userId;
     }

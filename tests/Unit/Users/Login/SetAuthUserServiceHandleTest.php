@@ -31,25 +31,27 @@ class SetAuthUserServiceHandleTest extends TestCase
 
     }
     /**
-     * @dataProvider Tests\Unit\Users\Login\DataProviders\ProvideDataForCheckValidDataHandle::LoginServiceTest()
+     * @dataProvider Tests\Unit\Users\Login\DataProviders\ProvideDataForSetAuthUserHandle::LoginServiceTest()
      */
-    public function testLoginService(array $data, bool $result, bool $expected): void
+    public function testLoginService(array $data, int $result, int $expected): void
     {
         $loginDTO = new LoginDTO($data['email'], $data['password']);
 
         $this->getUserID
             ->method('getUserId')
-            ->willReturn(2);
+            ->willReturn($result);
 
         $this->userRepository
             ->method('getById')
-            ->with($this->getUserID)
             ->willReturn($this->userIterator);
 
+        $this->userIterator
+            ->method('getId')
+            ->willReturn($result);
 
         $data = $this->setAuthUserServiceHandle->handle($loginDTO, function (LoginDTO $loginDTO){
             return $loginDTO;
         });
-        $this->assertSame($expected, $data->getUserId()->getId());
+        $this->assertEquals($expected, $data->getUserId());
     }
 }

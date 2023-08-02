@@ -23,7 +23,6 @@ class CheckValidDataHandle implements LoginInterface
             'email' => $loginDTO->getEmail(),
             'password' => $loginDTO->getPassword(),
         ];
-
         if($this->checkAuthData->getAuth($data) === false){
             $loginDTO->setResult(false);
             return $loginDTO;
