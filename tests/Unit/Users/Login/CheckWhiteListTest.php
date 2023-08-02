@@ -36,23 +36,29 @@ class CheckWhiteListTest extends TestCase
     /**
      * @dataProvider Tests\Unit\Users\Login\DataProviders\ProvideDataForWhiteListHandle::LoginServiceTest()
      */
-    public function testLoginService(array $data, bool $result, bool $expected): void
+    public function testLoginService(int $data, bool $result, bool $expected): void
     {
-        $loginDTO = new LoginDTO($data['email'], $data['password']);
-        $loginDTO->setUserId($data['id']);
 
+        $this->loginDTO
+            ->method('setUserId')
+            ->with($data);
+
+        $this->loginDTO
+            ->method('getUserId')
+            ->willReturn($data);
 
         $this->whiteListIpRepository
             ->method('checkUserIp')
             ->willReturn($result);
 
         $this->loginDTO
-            ->method('getUserId')
-            ->with($data['id']);
+            ->method('getResult')
+            ->willReturn($result);
 
-        $data = $this->checkWhiteListIpHandle->handle($loginDTO, function (LoginDTO $loginDTO){
+
+        $this->checkWhiteListIpHandle->handle($this->loginDTO, function (LoginDTO $loginDTO){
             return $loginDTO;
         });
-        $this->assertEquals($expected, $data->getResult());
+        $this->assertEquals($expected, $this->loginDTO->getResult());
     }
 }

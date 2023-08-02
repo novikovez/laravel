@@ -17,6 +17,8 @@ class SetAuthUserServiceHandleTest extends TestCase
     protected UserIterator $userIterator;
     protected GetUserID $getUserID;
 
+    protected LoginDTO $loginDTO;
+
     /**
      * @throws Exception
      * @throws \PHPUnit\Framework\MockObject\Exception
@@ -27,6 +29,7 @@ class SetAuthUserServiceHandleTest extends TestCase
         $this->userRepository = $this->createMock(UsersRepository::class);
         $this->userIterator = $this->createMock(UserIterator::class);
         $this->getUserID = $this->createMock(GetUserID::class);
+        $this->loginDTO = $this->createMock(LoginDTO::class);
         $this->setAuthUserServiceHandle = new SetAuthUserServiceHandle($this->userRepository, $this->getUserID );
 
     }
@@ -49,9 +52,17 @@ class SetAuthUserServiceHandleTest extends TestCase
             ->method('getId')
             ->willReturn($result);
 
-        $data = $this->setAuthUserServiceHandle->handle($loginDTO, function (LoginDTO $loginDTO){
+        $this->loginDTO
+            ->method('setUserId')
+            ->with($result);
+
+        $this->loginDTO
+            ->method('getUserId')
+            ->willReturn($result);
+
+        $this->setAuthUserServiceHandle->handle($this->loginDTO, function (LoginDTO $loginDTO){
             return $loginDTO;
         });
-        $this->assertEquals($expected, $data->getUserId());
+        $this->assertSame($expected, $this->loginDTO->getUserId());
     }
 }

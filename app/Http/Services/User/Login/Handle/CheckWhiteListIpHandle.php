@@ -25,7 +25,6 @@ class CheckWhiteListIpHandle implements LoginInterface
             $loginDTO->setResult(false);
             return $loginDTO;
         }
-        $loginDTO->setResult(true);
         return $next($loginDTO);
     }
 }
