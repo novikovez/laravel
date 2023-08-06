@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Services\Payments\Module\Stripe;
+namespace App\Http\Services\Payments\Factory\Module\Stripe;
 
-use App\Http\Services\Payments\DTO\CreateTokenDTO;
+use App\Http\Services\Payments\Factory\DTO\CreateTokenDTO;
+use App\Http\Services\Payments\Module\Stripe\CardException;
+use App\Http\Services\Payments\Module\Stripe\Exception;
 use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
 

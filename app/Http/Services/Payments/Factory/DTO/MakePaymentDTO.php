@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Services\Payments\DTO;
+namespace App\Http\Services\Payments\Factory\DTO;
 
 use App\Enum\CurrencyEnum;
+
 class MakePaymentDTO
 {
     public function __construct(

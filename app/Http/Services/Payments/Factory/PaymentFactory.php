@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Http\Services\Payments;
+namespace App\Http\Services\Payments\Factory;
 
 use App\Enum\PaymentsEnum;
-use App\Http\Services\Payments\Module\PayPal\PayPalService;
-use App\Http\Services\Payments\Module\Stripe\StripeService;
+use App\Http\Services\Payments\Factory\Module\PayPal\PayPalService;
+use App\Http\Services\Payments\Factory\Module\Stripe\StripeService;
 use Illuminate\Contracts\Container\BindingResolutionException;
+
 
 class PaymentFactory
 {
     /**
+     * @throws BindingResolutionException
      * @throws BindingResolutionException
      */
     public function getInstance(PaymentsEnum $paymentsEnum): PaymentInterface

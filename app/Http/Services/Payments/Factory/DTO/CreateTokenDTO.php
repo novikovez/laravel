@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services\Payments\DTO;
+namespace App\Http\Services\Payments\Factory\DTO;
 
 class CreateTokenDTO
 {

@@ -1,0 +1,19 @@
+GET http://laravel.project/api/payment/makePayment
+Content-Type: application/json
+Accept: application/json
+Cookie: XDEBUG_SESSION=PHPSTORM
+
+{
+    "paymentSystem": 1
+}
+
+
+#######
+GET http://laravel.project/api/payment/confirm/1
+Content-Type: application/json
+Accept: application/json
+Cookie: XDEBUG_SESSION=PHPSTORM
+
+{
+    "paymentId": "05Y39081KL674804L"
+}
