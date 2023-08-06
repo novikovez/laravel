@@ -18,8 +18,9 @@ class PayPalService implements PaymentInterface
     /**
      * @throws Throwable
      */
-    public function makePayment(MakePaymentDTO $paymentDTO)
+    public function makePayment(MakePaymentDTO $paymentDTO): void
     {
+        /// поки ставлю void, мабуть на наступному дз буду розуіти що потрібно віддати, та зміню
         $this->payPalClient->setApiCredentials(config('paypal'));
         $paypalToken = $this->payPalClient->getAccessToken();
         $response = $this->payPalClient->createOrder([

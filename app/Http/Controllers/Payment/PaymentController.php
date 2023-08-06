@@ -21,8 +21,9 @@ class PaymentController extends Controller
     /**
      * @throws BindingResolutionException
      */
-    public function index(PaymentMakeRequest $request)
+    public function index(PaymentMakeRequest $request): void
     {
+        /// поки ставлю void, мабуть на наступному дз буду розуіти що потрібно віддати, та зміню
         $request->validated();
         $makePaymentDTO = new MakePaymentDTO(...$request->validated());
         $paymentService = $this->paymentFactory->getInstance(PaymentsEnum::PAYPAL);

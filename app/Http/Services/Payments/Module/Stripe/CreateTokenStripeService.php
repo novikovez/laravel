@@ -7,7 +7,7 @@ use Stripe\Exception\ApiErrorException;
 use Stripe\StripeClient;
 
 
-class CreateTokenService
+class CreateTokenStripeService
 {
     public function __construct(
         protected StripeClient $stripe,
