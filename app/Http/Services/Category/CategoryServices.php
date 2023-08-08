@@ -45,4 +45,10 @@ class CategoryServices
         return $this->categoryRepository->index();
 
     }
+
+    public function showModel($id): Collection
+    {
+        return $this->categoryRepository->showModel($id);
+
+    }
 }

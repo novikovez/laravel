@@ -17,7 +17,7 @@ class CategoryShowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => ['required', 'integer', 'exists:categories,id'],
+            'id' => ['sometimes', 'integer', 'exists:categories,id'],
         ];
     }
 

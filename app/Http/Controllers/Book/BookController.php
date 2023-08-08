@@ -99,4 +99,11 @@ class BookController extends Controller
     {
         return $this->bookServices->updateLang();
     }
+
+    public function indexModel(): AnonymousResourceCollection
+    {
+        return BookResource::collection(
+            $this->bookServices->indexModel()
+        );
+    }
 }

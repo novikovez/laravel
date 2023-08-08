@@ -57,4 +57,10 @@ class BookServices
         return $this->bookRepository->updateLang();
 
     }
+
+    public function indexModel(): Collection
+    {
+        return $this->bookRepository->indexModel();
+
+    }
 }

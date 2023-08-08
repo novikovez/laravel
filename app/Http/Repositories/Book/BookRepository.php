@@ -3,6 +3,7 @@
 namespace App\Http\Repositories\Book;
 
 use App\Http\Repositories\Book\Iterators\BookIterator;
+use App\Models\Book;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -103,6 +104,14 @@ class BookRepository
                 }
             });
         return json_encode('Language Updated');
+    }
+
+    public function indexModel(): Collection
+    {
+        return Book::query()
+            ->with('author', 'category')
+            ->limit(1000)
+            ->get();
     }
 
 }

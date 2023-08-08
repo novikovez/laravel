@@ -1,7 +1,6 @@
 <?php
 
-namespace Database\Seeders;
-ini_set('memory_limit', '256M');
+namespace database\seeders;
 
 use App\Enum\LangEnum;
 use Illuminate\Database\Seeder;
@@ -9,8 +8,12 @@ use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 
 
-class CreateBooks extends Seeder
+class CreateAuthorBook extends Seeder
 {
+    /**
+     * Run the database seeds.
+     */
+
     public function run(): void
     {
         DB::disableQueryLog();
@@ -21,22 +24,18 @@ class CreateBooks extends Seeder
 
         $arrays = array_chunk(range(1, 200000), 1000);
         foreach ($arrays as $items) {
-            $books = [];
+            $data = [];
             foreach ($items as $item) {
-                $books[] = [
-                    'name' => $faker->slug(1),
-                    'year' => $faker->year,
-                    'lang' => $faker->randomElement(LangEnum::getValues()),
-                    'pages' => rand(1,1000),
-                    'created_at' => now(),
-                    'category_id' => rand(1,200),
+                $data[] = [
+                    'author_id' => rand(1, 5000),
+                    'book_id' => rand(1, 200000),
                 ];
             }
-            DB::table('books')->insert($books);
-            unset($books);
+            DB::table('author_book')->insert($data);
+            unset($data);
         }
         DB::enableQueryLog();
         DB::connection()->setEventDispatcher($dispatcher);
-    }
 
+    }
 }

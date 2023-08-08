@@ -8,6 +8,7 @@ use App\Http\Requests\Category\CategoryShowRequest;
 use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
 use App\Http\Resources\Category\CategoryResource;
+use App\Http\Resources\Category\CategoryResourceModel;
 use App\Http\Services\Category\CategoryServices;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -65,5 +66,11 @@ class CategoryController extends Controller
         $data = $request->validated();
         $this->categoryServices->destroy($data['id']);
         return $this->getNoContentResponse();
+    }
+
+    public function showModel(CategoryShowRequest $request): AnonymousResourceCollection
+    {
+        $data = $request->validated();
+        return CategoryResourceModel::collection($this->categoryServices->showModel($request->id));
     }
 }
