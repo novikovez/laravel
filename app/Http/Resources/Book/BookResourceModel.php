@@ -19,7 +19,6 @@ class BookResourceModel extends JsonResource
     {
         /** @var Book $resource */
         $resource = $this->resource;
-
         return [
             'id' => $resource->id,
             'name' => $resource->name,

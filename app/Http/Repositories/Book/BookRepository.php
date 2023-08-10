@@ -110,7 +110,7 @@ class BookRepository
     public function indexModel(): Collection
     {
         return Book::query()
-            ->with('author', 'category')
+            ->with('author')
             ->orderBy('books.id', 'DESC')
             ->limit(5000)
             ->get();
