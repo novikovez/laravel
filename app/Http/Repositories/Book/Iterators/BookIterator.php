@@ -2,7 +2,11 @@
 
 namespace App\Http\Repositories\Book\Iterators;
 
+use App\Http\Repositories\Author\Iterators\AuthorBooksIterator;
+use App\Http\Repositories\Author\Iterators\AuthorsIterator;
 use App\Http\Repositories\Category\Iterators\CategoryIterator;
+use Illuminate\Support\Collection;
+
 
 class BookIterator
 {
@@ -16,18 +20,13 @@ class BookIterator
 
     public function __construct(object $data)
     {
-        $this->id = $data->id;
-        $this->name = $data->name;
-        $this->year = $data->year;
-        $this->lang = $data->lang;
-        $this->pages = $data->pages;
-        $this->categoryIterator = new CategoryIterator((object)[
-            "id" => $data->category_id,
-            "name" => $data->category_name
-        ]
-        );
-        $this->created_at = $data->created_at;
+        $this->id = $data->book_id;
+        $this->name = $data->book_name;
+        $this->year = $data->book_year;
+        $this->lang = $data->book_lang;
+        $this->pages = $data->book_pages;
     }
+
 
     /**
      * @return CategoryIterator

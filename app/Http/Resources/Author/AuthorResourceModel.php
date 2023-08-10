@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Http\Resources\Book;
+namespace App\Http\Resources\Author;
 
-use App\Http\Repositories\Book\Iterators\BookIterator;
-use App\Http\Resources\Category\CategoryResource;
-use App\Models\Book;
+use App\Http\Repositories\Category\Iterators\CategoryIterator;
+use App\Http\Resources\Book\BookResourceModel;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Stripe\Collection;
 
-class BookCategoryModelResource extends JsonResource
+class AuthorResourceModel extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -20,9 +20,11 @@ class BookCategoryModelResource extends JsonResource
     {
         /** @var Category $resource */
         $resource = $this->resource;
+        //dd($resource->book);
         return [
             'id' => $resource->id,
-            'name' => $resource->name
+            'name' => $resource->author,
+            'books' => BookResourceModel::collection($resource->book)
         ];
     }
 }

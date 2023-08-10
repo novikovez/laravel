@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Http\Repositories\Category\Iterators;
+namespace App\Http\Repositories\Book\Iterators;
 
+use App\Http\Repositories\Author\Iterators\AuthorsIterator;
 use App\Http\Repositories\Book\Iterators\BookIterator;
+use App\Http\Repositories\Category\Iterators\CategoryIterator;
 use ArrayIterator;
 use Illuminate\Support\Collection;
 use IteratorAggregate;
 
-class CategoriesIterator implements IteratorAggregate
+class BooksIterator implements IteratorAggregate
 {
     protected array $data = [];
 
@@ -16,19 +18,20 @@ class CategoriesIterator implements IteratorAggregate
      */
     public function __construct(Collection $collection)
     {
-        $collection = $collection->groupBy('category_id');
+        $collection = $collection->groupBy('book_id');
         foreach ($collection as $item) {
             $collection = collect([
-                new CategoryIterator($item->unique('category_id')[0]),
-                new CategoriesBooksIterator($item)
+                new BookIterator($item->unique('author_id')[0]),
+                new BookAuthorsIterator($item)
             ]);
             $this->data[] = $collection;
+
         }
     }
 
-    public function add(CategoryIterator $categoryIterator): void
+    public function add(BookIterator $bookIterator): void
     {
-        $this->data[] = $categoryIterator;
+        $this->data[] = $bookIterator;
     }
 
     public function getIterator(): ArrayIterator

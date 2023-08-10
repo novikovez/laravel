@@ -18,7 +18,9 @@ class CreateBooks extends Seeder
         DB::connection()->unsetEventDispatcher();
 
         $faker = Faker::create();
-
+        $categories = DB::table('categories')->pluck('id')->toArray();
+        $categoryCount = count($categories);
+        $categoryIndex = 0;
         $arrays = array_chunk(range(1, 200000), 1000);
         foreach ($arrays as $items) {
             $books = [];
@@ -29,8 +31,10 @@ class CreateBooks extends Seeder
                     'lang' => $faker->randomElement(LangEnum::getValues()),
                     'pages' => rand(1,1000),
                     'created_at' => now(),
-                    'category_id' => rand(1,200),
+                    'category_id' => $categories[$categoryIndex],
                 ];
+                $categoryIndex = ($categoryIndex + 1) % $categoryCount;
+
             }
             DB::table('books')->insert($books);
             unset($books);

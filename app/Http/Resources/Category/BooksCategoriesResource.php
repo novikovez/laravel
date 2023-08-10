@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Category;
 
+use App\Http\Repositories\Book\Iterators\BookIterator;
 use App\Http\Repositories\Book\Iterators\BooksIterator;
 use App\Http\Repositories\Category\Iterators\CategoryIterator;
 use App\Http\Resources\Book\BookResource;
@@ -9,7 +10,7 @@ use App\Http\Resources\Book\BookResourceIterator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryResource extends JsonResource
+class BooksCategoriesResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,12 +20,14 @@ class CategoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        /** @var CategoryIterator $resource */
+        /** @var BookIterator $resource */
         $resource = $this->resource;
         return [
-            'category_id' => $resource['category']->getId(),
-            'category_name' => $resource['category']->getName(),
-            'books' => BookResource::collection($resource->getBooksIterator()->getIterator()->getArrayCopy())
+            'id' => $resource->getId(),
+            'name' => $resource->getName(),
+            'year' => $resource->getYear(),
+            'lang' => $resource->getLang(),
+            'pages' => $resource->getPages(),
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Services\Author;
 
 use App\Http\Repositories\Author\AuthorRepository;
+use App\Http\Repositories\Author\Iterators\AuthorsIterator;
 use App\Http\Repositories\Category\CategoryRepository;
 use App\Http\Repositories\Category\Iterators\CategoryIterator;
 use Illuminate\Http\Request;
@@ -23,4 +24,12 @@ class AuthorServices
 
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function showIterator(): AuthorsIterator
+    {
+        return $this->authorRepository->showIterator();
+
+    }
 }

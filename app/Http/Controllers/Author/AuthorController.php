@@ -7,6 +7,8 @@ use App\Http\Requests\Category\CategoryDestroyRequest;
 use App\Http\Requests\Category\CategoryShowRequest;
 use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
+use App\Http\Resources\Author\AuthorResourceIterator;
+use App\Http\Resources\Author\AuthorResourceModel;
 use App\Http\Resources\Category\CategoryResource;
 use App\Http\Resources\Category\CategoryResourceModel;
 use App\Http\Services\Author\AuthorServices;
@@ -27,9 +29,17 @@ class AuthorController extends Controller
 
     public function indexModel(): AnonymousResourceCollection
     {
-        return CategoryResourceModel::collection(
+        return AuthorResourceModel::collection(
             $this->authorServices->indexModel()
         );
     }
 
+    /**
+     * @throws \Exception
+     */
+    public function showIterator(): AnonymousResourceCollection
+    {
+        $result = $this->authorServices->showIterator();
+        return AuthorResourceIterator::collection($result->getIterator()->getArrayCopy());
+    }
 }

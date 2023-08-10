@@ -13,10 +13,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            CreateCategories::class,
-            CreateBooks::class,
             CreateUser::class,
+            CreateCategories::class,
             CreateAuthors::class,
+            CreateBooks::class,
             CreateAuthorBook::class,
         ]);
     }

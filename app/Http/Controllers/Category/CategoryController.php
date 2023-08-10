@@ -7,9 +7,11 @@ use App\Http\Requests\Category\CategoryDestroyRequest;
 use App\Http\Requests\Category\CategoryShowRequest;
 use App\Http\Requests\Category\CategoryStoreRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
+use App\Http\Resources\Category\CategoriesResourceIterator;
 use App\Http\Resources\Category\CategoryResource;
 use App\Http\Resources\Category\CategoryResourceModel;
 use App\Http\Services\Category\CategoryServices;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -68,9 +70,17 @@ class CategoryController extends Controller
         return $this->getNoContentResponse();
     }
 
-    public function showModel(CategoryShowRequest $request): AnonymousResourceCollection
+    public function showModel(): AnonymousResourceCollection
     {
-        $data = $request->validated();
-        return CategoryResourceModel::collection($this->categoryServices->showModel($request->id));
+        return CategoryResourceModel::collection($this->categoryServices->showModel());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function showIterator(): AnonymousResourceCollection
+    {
+        $result = $this->categoryServices->showIterator();
+        return CategoriesResourceIterator::collection($result->getIterator()->getArrayCopy());
     }
 }

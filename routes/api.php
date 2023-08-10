@@ -17,13 +17,13 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::get('dz15/categories/model/{category}', [CategoryController::class, 'showModel']);
+Route::get('dz15/categories/model', [CategoryController::class, 'showModel']);
 Route::get('dz15/books/model', [BookController::class, 'indexModel']);
 Route::get('dz15/authors/model', [AuthorController::class, 'indexModel']);
 
-Route::apiResource('/categories', CategoryController::class);
-
-
+Route::get('dz15/categories/iterator', [CategoryController::class, 'showIterator']);
+Route::get('dz15/books/iterator', [BookController::class, 'showIterator']);
+Route::get('dz15/authors/iterator', [AuthorController::class, 'showIterator']);
 
 Route::middleware(['auth:api'])->group(
     function() {

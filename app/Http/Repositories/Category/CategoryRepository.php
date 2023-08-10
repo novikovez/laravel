@@ -2,6 +2,7 @@
 
 namespace App\Http\Repositories\Category;
 
+use App\Http\Repositories\Category\Iterators\CategoriesIterator;
 use App\Http\Repositories\Category\Iterators\CategoryIterator;
 use App\Models\Category;
 use Illuminate\Support\Collection;
@@ -62,45 +63,48 @@ class CategoryRepository
         return DB::table('categories')->delete($id);
     }
 
-    public function showModel($id): Collection
+    public function showModel(): Collection
     {
 
         return Category::query()
         ->with('book')
-        ->limit(2000)
-        ->where('id', '=', $id)
+        ->orderBy('id', 'DESC')
+        ->limit(50)
         ->get();
 
     }
 
-    public function showIterator($id): CategoryIterator
+    /**
+     * @throws \Exception
+     */
+    public function showIterator(): CategoriesIterator
     {
-        dd(DB::table('categories')
+        /// Тут не зрозумів, якщо поставити ліміт 200 категорій, то $result пустий
+        $one = DB::table('categories')
             ->select([
                 'categories.id',
-                'categories.name',
-                'books.id',
-                'books.name',
-                'books.year',
-                'books.lang',
-                'books.pages',
-                'books.pages',
             ])
-            ->join('books', 'books.id', '=', 'categories.id')
-            ->join('author_book', 'book_id', '=', 'books.id')
-            ->join('authors', 'authors.id', '=', 'author_book.author_id')
-            ->where('categories.id', '=', $id)
-            ->limit(10)
-            ->get());
+            ->orderBy('categories.id', 'DESC')
+            ->limit(50)
+            ->get();
 
-        return new CategoryIterator(DB::table('categories')
+        $result = DB::table('categories')
+            ->whereIn('categories.id', $one->pluck('id'))
             ->select([
-                'categories.id',
-                'categories.name'
+                'categories.id as category_id',
+                'categories.name as category_name',
+                'books.id as book_id',
+                'books.name as book_name',
+                'books.year as book_year',
+                'books.lang as book_lang',
+                'books.pages as book_pages',
             ])
-            ->join('books', 'books.id', '=', 'categories.id')
-            ->where('categories.id', '=', $id)
-            ->limit(10)
-            ->get());
+            ->join('books', 'category_id', '=', 'categories.id')
+            ->orderBy('categories.id', 'DESC')
+            ->get();
+
+        return new CategoriesIterator($result);
+
+
     }
 }

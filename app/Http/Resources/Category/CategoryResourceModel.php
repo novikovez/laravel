@@ -23,7 +23,7 @@ class CategoryResourceModel extends JsonResource
         //dd($resource->book);
         return [
             'id' => $resource->id,
-            'name' => $resource->author,
+            'name' => $resource->name,
             'books' => BookResourceModel::collection($resource->book)
         ];
     }

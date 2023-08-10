@@ -7,6 +7,7 @@ use App\Http\Repositories\Book\BookRepository;
 use App\Http\Repositories\Book\BookStoreDTO;
 use App\Http\Repositories\Book\BookUpdateDTO;
 use App\Http\Repositories\Book\Iterators\BookIterator;
+use App\Http\Repositories\Book\Iterators\BooksIterator;
 use Illuminate\Support\Collection;
 
 class BookServices
@@ -61,6 +62,15 @@ class BookServices
     public function indexModel(): Collection
     {
         return $this->bookRepository->indexModel();
+
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function showIterator(): BooksIterator
+    {
+        return $this->bookRepository->showIterator();
 
     }
 }

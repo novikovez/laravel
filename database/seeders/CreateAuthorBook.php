@@ -21,15 +21,22 @@ class CreateAuthorBook extends Seeder
         DB::connection()->unsetEventDispatcher();
 
         $faker = Faker::create();
+        $authors = DB::table('authors')->pluck('id')->toArray();
 
-        $arrays = array_chunk(range(1, 200000), 1000);
+        $books = DB::table('books')->pluck('id')->toArray();
+        $booksCount = count($books);
+        $booksIndex = 0;
+        $arrays = array_chunk(range(1, 400000), 1000);
         foreach ($arrays as $items) {
             $data = [];
             foreach ($items as $item) {
                 $data[] = [
-                    'author_id' => rand(1, 5000),
-                    'book_id' => rand(1, 200000),
+                    'author_id' => $faker->randomElement($authors),
+                    'book_id' => $books[$booksIndex],
                 ];
+
+                $booksIndex = ($booksIndex + 1) % $booksCount;
+
             }
             DB::table('author_book')->insert($data);
             unset($data);
