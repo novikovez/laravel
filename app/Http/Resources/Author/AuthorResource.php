@@ -20,7 +20,7 @@ class AuthorResource extends JsonResource
         $resource = $this->resource;
         return [
             'id' => $resource->id,
-            'name' => $resource->name
+            'name' => $resource->author
         ];
     }
 }

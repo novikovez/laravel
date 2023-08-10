@@ -32,7 +32,7 @@ class BookResourceIterator extends JsonResource
             'year' => $resource[0]->getYear(),
             'lang' =>$resource[0]->getLang(),
             'pages' => $resource[0]->getPages(),
-            'authors' => BookAuthorResource::collection($resource[1]->getIterator()->getArrayCopy())
+            'author' => BookAuthorResource::collection($resource[1]->getIterator()->getArrayCopy())
         ];
     }
 }
