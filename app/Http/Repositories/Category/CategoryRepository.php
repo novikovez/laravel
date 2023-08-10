@@ -2,7 +2,9 @@
 
 namespace App\Http\Repositories\Category;
 
+use App\Http\Repositories\Category\Iterators\CategoriesIterator;
 use App\Http\Repositories\Category\Iterators\CategoryIterator;
+use App\Models\Category;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -34,8 +36,16 @@ class CategoryRepository
 
     public function show(int $id): CategoryIterator
     {
+
+
+
         return new CategoryIterator(DB::table('categories')
-            ->where('id', '=', $id)
+            ->select([
+                'categories.id',
+                'categories.name'
+            ])
+            ->join('books', 'category_id', '=', 'categories.id')
+            ->where('categories.id', '=', $id)
             ->first());
     }
 
@@ -53,4 +63,48 @@ class CategoryRepository
         return DB::table('categories')->delete($id);
     }
 
+    public function showModel(): Collection
+    {
+
+        return Category::query()
+        ->with('book')
+        ->orderBy('id', 'DESC')
+        ->limit(50)
+        ->get();
+
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function showIterator(): CategoriesIterator
+    {
+        /// Тут не зрозумів, якщо поставити ліміт 200 категорій, то $result пустий
+        $one = DB::table('categories')
+            ->select([
+                'categories.id',
+            ])
+            ->orderBy('categories.id', 'DESC')
+            ->limit(50)
+            ->get();
+
+        $result = DB::table('categories')
+            ->whereIn('categories.id', $one->pluck('id'))
+            ->select([
+                'categories.id as category_id',
+                'categories.name as category_name',
+                'books.id as book_id',
+                'books.name as book_name',
+                'books.year as book_year',
+                'books.lang as book_lang',
+                'books.pages as book_pages',
+            ])
+            ->join('books', 'category_id', '=', 'categories.id')
+            ->orderBy('categories.id', 'DESC')
+            ->get();
+
+        return new CategoriesIterator($result);
+
+
+    }
 }

@@ -3,7 +3,9 @@
 namespace App\Http\Services\Category;
 
 use App\Http\Repositories\Category\CategoryRepository;
+use App\Http\Repositories\Category\Iterators\CategoriesIterator;
 use App\Http\Repositories\Category\Iterators\CategoryIterator;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -43,6 +45,21 @@ class CategoryServices
     public function index(): Collection
     {
         return $this->categoryRepository->index();
+
+    }
+
+    public function showModel(): Collection
+    {
+        return $this->categoryRepository->showModel();
+
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function showIterator(): CategoriesIterator
+    {
+        return $this->categoryRepository->showIterator();
 
     }
 }

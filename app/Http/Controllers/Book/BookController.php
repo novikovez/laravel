@@ -15,6 +15,7 @@ use App\Http\Requests\Book\BookShowRequest;
 use App\Http\Requests\Book\BookStoreRequest;
 use App\Http\Requests\Book\BookUpdateRequest;
 use App\Http\Resources\Book\BookResource;
+use App\Http\Resources\Book\BookResourceIterator;
 use App\Http\Services\Book\BookServices;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -98,5 +99,23 @@ class BookController extends Controller
     public function updateLang(): string
     {
         return $this->bookServices->updateLang();
+    }
+
+    public function indexModel(): AnonymousResourceCollection
+    {
+        return BookResource::collection(
+            $this->bookServices->indexModel()
+        );
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function showIterator(): AnonymousResourceCollection
+    {
+        $result = $this->bookServices->showIterator()->getIterator()->getArrayCopy();
+        return BookResourceIterator::collection($result);
+
+
     }
 }

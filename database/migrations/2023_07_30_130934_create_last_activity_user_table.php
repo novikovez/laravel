@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('user_id');
             $table->string('ip');
-            $table->timestamps('created_at');
+            $table->timestamps();
         });
     }
 

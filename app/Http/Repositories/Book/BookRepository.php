@@ -3,6 +3,8 @@
 namespace App\Http\Repositories\Book;
 
 use App\Http\Repositories\Book\Iterators\BookIterator;
+use App\Http\Repositories\Book\Iterators\BooksIterator;
+use App\Models\Book;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -105,4 +107,44 @@ class BookRepository
         return json_encode('Language Updated');
     }
 
+    public function indexModel(): Collection
+    {
+        return Book::query()
+            ->with('author', 'category')
+            ->orderBy('books.id', 'DESC')
+            ->limit(5000)
+            ->get();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function showIterator(): BooksIterator
+    {
+        $one = DB::table('books')
+            ->select([
+                'books.id',
+            ])
+            ->limit(5000)
+            ->orderBy('books.id', 'DESC')
+            ->get();
+
+        $result = DB::table('books')
+            ->whereIn('books.id', $one->pluck('id'))
+            ->select([
+                'books.id as book_id',
+                'books.name as book_name',
+                'books.year as book_year',
+                'books.lang as book_lang',
+                'books.pages as book_pages',
+                'authors.id as author_id',
+                'authors.author as author_name',
+            ])
+            ->join('author_book', 'book_id', '=', 'books.id')
+            ->join('authors', 'authors.id', '=', 'author_book.author_id')
+            ->orderBy('books.id', 'DESC')
+            ->get();
+
+        return new BooksIterator($result);
+    }
 }
