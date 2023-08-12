@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Category;
 
 use App\Http\Repositories\Book\Iterators\BooksIterator;
+use App\Http\Repositories\Category\CategoriesIteratorDTO;
 use App\Http\Repositories\Category\Iterators\CategoriesIterator;
 use App\Http\Repositories\Category\Iterators\CategoryIterator;
 use App\Http\Resources\Book\BookResource;
@@ -20,13 +21,14 @@ class CategoriesResourceIterator extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        /** @var CategoriesIterator $resource */
+        /** @var CategoriesIteratorDTO $resource */
         $resource = $this->resource;
+        $books = $resource->getCategoriesBooksIterator()->getIterator()->getArrayCopy();
         //dd($resource);
         return [
-            'category_id' => $resource[0]->getId(),
-            'category_name' => $resource[0]->getName(),
-            'books' => BooksCategoriesResource::collection($resource[1]->getIterator()->getArrayCopy())
+            'category_id' => $resource->getCategoryIterator()->getId(),
+            'category_name' => $resource->getCategoryIterator()->getName(),
+            'books' => BooksCategoriesResource::collection($books)
         ];
     }
 }
