@@ -4,6 +4,7 @@ namespace App\Http\Resources\Book;
 
 use App\Http\Repositories\Author\Iterators\AuthorBooksIterator;
 use App\Http\Repositories\Author\Iterators\AuthorsIterator;
+use App\Http\Repositories\Book\DTO\BooksIteratorDTO;
 use App\Http\Repositories\Book\Iterators\BookIterator;
 use App\Http\Repositories\Book\Iterators\BooksIterator;
 use App\Http\Resources\Author\AuthorResource;
@@ -24,15 +25,16 @@ class BookResourceIterator extends JsonResource
     public function toArray(Request $request): array
     {
 
-        /** @var BooksIterator $resource */
+        /** @var BooksIteratorDTO $resource */
         $resource = $this->resource;
+        $authors = $resource->getBookAuthorsIterator()->getIterator()->getArrayCopy();
         return [
-            'id' => $resource[0]->getId(),
-            'name' => $resource[0]->getName(),
-            'year' => $resource[0]->getYear(),
-            'lang' =>$resource[0]->getLang(),
-            'pages' => $resource[0]->getPages(),
-            'author' => BookAuthorResource::collection($resource[1]->getIterator()->getArrayCopy())
+            'id' => $resource->getBookIterator()->getId(),
+            'name' => $resource->getBookIterator()->getName(),
+            'year' => $resource->getBookIterator()->getYear(),
+            'lang' =>$resource->getBookIterator()->getLang(),
+            'pages' => $resource->getBookIterator()->getPages(),
+            'author' => BookAuthorResource::collection($authors)
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Repositories\Book\Iterators;
 
 use App\Http\Repositories\Author\Iterators\AuthorsIterator;
+use App\Http\Repositories\Book\DTO\BooksIteratorDTO;
 use App\Http\Repositories\Book\Iterators\BookIterator;
 use App\Http\Repositories\Category\Iterators\CategoryIterator;
 use ArrayIterator;
@@ -20,11 +21,11 @@ class BooksIterator implements IteratorAggregate
     {
         $collection = $collection->groupBy('book_id');
         foreach ($collection as $item) {
-            $collection = collect([
+            $dto = new BooksIteratorDTO(
                 new BookIterator($item->unique('author_id')[0]),
                 new BookAuthorsIterator($item)
-            ]);
-            $this->data[] = $collection;
+            );
+            $this->data[] = $dto;
 
         }
     }

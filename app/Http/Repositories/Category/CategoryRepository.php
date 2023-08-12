@@ -69,7 +69,7 @@ class CategoryRepository
         return Category::query()
         ->with('book')
         ->orderBy('id', 'DESC')
-        ->limit(50)
+        ->whereBetween('categories.id', [0, 50])
         ->get();
 
     }
@@ -79,17 +79,7 @@ class CategoryRepository
      */
     public function showIterator(): CategoriesIterator
     {
-        /// Тут не зрозумів, якщо поставити ліміт 200 категорій, то $result пустий
-        $one = DB::table('categories')
-            ->select([
-                'categories.id',
-            ])
-            ->orderBy('categories.id', 'DESC')
-            ->limit(50)
-            ->get();
-
         $result = DB::table('categories')
-            ->whereIn('categories.id', $one->pluck('id'))
             ->select([
                 'categories.id as category_id',
                 'categories.name as category_name',
@@ -99,8 +89,9 @@ class CategoryRepository
                 'books.lang as book_lang',
                 'books.pages as book_pages',
             ])
-            ->join('books', 'category_id', '=', 'categories.id')
+            ->join('books', 'categories.id', '=', 'books.category_id')
             ->orderBy('categories.id', 'DESC')
+            ->whereBetween('categories.id', [0, 50])
             ->get();
 
         return new CategoriesIterator($result);

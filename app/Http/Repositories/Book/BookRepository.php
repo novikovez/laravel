@@ -112,7 +112,7 @@ class BookRepository
         return Book::query()
             ->with('author')
             ->orderBy('books.id', 'DESC')
-            ->limit(5000)
+            ->whereBetween('books.id', [0, 5000])
             ->get();
     }
 
@@ -121,16 +121,7 @@ class BookRepository
      */
     public function showIterator(): BooksIterator
     {
-        $one = DB::table('books')
-            ->select([
-                'books.id',
-            ])
-            ->limit(5000)
-            ->orderBy('books.id', 'DESC')
-            ->get();
-
         $result = DB::table('books')
-            ->whereIn('books.id', $one->pluck('id'))
             ->select([
                 'books.id as book_id',
                 'books.name as book_name',
@@ -142,6 +133,7 @@ class BookRepository
             ])
             ->join('author_book', 'book_id', '=', 'books.id')
             ->join('authors', 'authors.id', '=', 'author_book.author_id')
+            ->whereBetween('books.id', [0, 5000])
             ->orderBy('books.id', 'DESC')
             ->get();
 
