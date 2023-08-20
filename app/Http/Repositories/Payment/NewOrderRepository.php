@@ -17,7 +17,7 @@ class NewOrderRepository
                 'user_id' => auth()->user()->id,
                 'payment_system' => $makePaymentDTO->getPaymentsEnum()->value,
                 'order_id' => $makePaymentDTO->getOrderId(),
-                'status' => PaymentStatusEnum::tryFrom(2)->value,
+                'status' => PaymentStatusEnum::ORDER_NOT_APPROVED->value,
                 'amount' => $makePaymentDTO->getAmount(),
                 'currency' => $makePaymentDTO->getCurrency()->value,
                 'created_at' => now()
