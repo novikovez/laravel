@@ -13,7 +13,7 @@ class NewOrderService
     {
     }
 
-    public function store(MakePaymentDTO $makePaymentDTO)
+    public function store(MakePaymentDTO $makePaymentDTO): bool
     {
         return $this->newOrderRepository->store($makePaymentDTO);
     }
