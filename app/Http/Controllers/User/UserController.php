@@ -28,7 +28,6 @@ class UserController extends Controller
         $data = $request->validated();
         $loginDTO = new LoginDTO(...$data);
         $this->loginService->handle($loginDTO);
-
         if ($loginDTO->getResult() === false) {
             return $this->getBadAuthResponse();
         }

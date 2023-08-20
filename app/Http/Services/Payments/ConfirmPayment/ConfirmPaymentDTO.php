@@ -2,7 +2,7 @@
 
 namespace App\Http\Services\Payments\ConfirmPayment;
 
-use App\Enum\PaymentsEnum;
+use Novikov7ua\Packagios\Enums\PaymentsEnum;
 
 class ConfirmPaymentDTO
 {
@@ -43,7 +43,7 @@ class ConfirmPaymentDTO
 
     public function __construct(
         protected PaymentsEnum $paymentsEnum,
-        protected string $paymentId
+        protected string $orderId
     )
     {
     }
@@ -59,8 +59,8 @@ class ConfirmPaymentDTO
     /**
      * @return string
      */
-    public function getPaymentId(): string
+    public function getOrderId(): string
     {
-        return $this->paymentId;
+        return $this->orderId;
     }
 }

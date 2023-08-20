@@ -2,7 +2,7 @@
 
 namespace App\Http\Services\Payments\ConfirmPayment;
 
-use App\Enum\PaymentsEnum;
+use Novikov7ua\Packagios\Enums\PaymentsEnum;
 use App\Http\Services\Payments\ConfirmPayment\Handlers\CheckPaymentResultHandler;
 use App\Http\Services\Payments\ConfirmPayment\Handlers\SavePaymentResultHandler;
 use Illuminate\Pipeline\Pipeline;
@@ -22,9 +22,9 @@ class ConfirmPaymentService
     }
 
 
-    public function handle(PaymentsEnum $paymentsEnum, string $paymentId)
+    public function handle(PaymentsEnum $paymentsEnum, string $orderId)
     {
-        $dto = new ConfirmPaymentDTO($paymentsEnum, $paymentId);
+        $dto = new ConfirmPaymentDTO($paymentsEnum, $orderId);
         return $this->pipeline
             ->send($dto)
             ->through(self::HANDLERS)

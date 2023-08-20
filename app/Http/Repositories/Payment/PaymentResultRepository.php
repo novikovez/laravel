@@ -4,28 +4,50 @@ namespace App\Http\Repositories\Payment;
 
 use App\Http\Services\Payments\ConfirmPayment\ConfirmPaymentDTO;
 use Illuminate\Support\Facades\DB;
+use Novikov7ua\Packagios\Enums\PaymentStatusEnum;
 
 class PaymentResultRepository
 {
 
     public function store(ConfirmPaymentDTO $confirmPaymentDTO): bool
     {
-        if(DB::table('order_payment_result')
-            ->insert([
-                'user_id' => auth()->user()->id,
-                'payment_system' => $confirmPaymentDTO->getPaymentsEnum()->value,
-                'payment_id' => $confirmPaymentDTO->getPaymentId(),
-                'order_id' => $confirmPaymentDTO->getPaymentData()->orderId,
-                'success' => $confirmPaymentDTO->getPaymentData()->success,
-                'status' => $confirmPaymentDTO->getPaymentData()->status->value,
-                'amount' => $confirmPaymentDTO->getPaymentData()->amount,
-                'currency' => $confirmPaymentDTO->getPaymentData()->currency,
-                'created_at' => now()
-            ])) {
+        if($this->checkStatus($confirmPaymentDTO) === true AND $this->checkTotal($confirmPaymentDTO) === true)
+        {
+            if(DB::table('order_payment_result')
+                ->where('order_id', '=', $confirmPaymentDTO->getPaymentData()->orderId)
+                ->update([
+                    'status' => $confirmPaymentDTO->getPaymentData()->status->value,
+                    'payment_id' => $confirmPaymentDTO->getPaymentData()->paymentId,
+                    'updated_at' => now()
+                ])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function checkStatus(ConfirmPaymentDTO $confirmPaymentDTO): bool
+    {
+        if($confirmPaymentDTO->getPaymentData()->status->name === PaymentStatusEnum::tryFrom(1)->name)
+        {
             return true;
         }
         return false;
     }
 
+    private function checkTotal(ConfirmPaymentDTO $confirmPaymentDTO): bool
+    {
+        $base = DB::table('order_payment_result')
+            ->select([
+                "amount"
+            ])
+            ->where('order_id', '=', $confirmPaymentDTO->getPaymentData()->orderId)
+            ->first();
 
+        if($base->amount === floatval($confirmPaymentDTO->getPaymentData()->amount))
+        {
+            return true;
+        }
+        return false;
+    }
 }

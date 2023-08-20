@@ -13,7 +13,7 @@ class PaymentConfirmRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'paymentId' => ['required', 'string', 'unique:order_payment_result,payment_id'],
+            'order_id' => ['required', 'string'],
         ];
     }
 
