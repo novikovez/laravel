@@ -9,7 +9,7 @@ class GetToken
 
     public function getToken(): PersonalAccessTokenResult
     {
-        return auth()->user()->createToken('APP');
+        return auth()->user()->createToken('secret');
     }
 }
 

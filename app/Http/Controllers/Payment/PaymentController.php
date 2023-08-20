@@ -2,38 +2,44 @@
 
 namespace App\Http\Controllers\Payment;
 
-use App\Enum\CurrencyEnum;
-use App\Enum\PaymentsEnum;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Payment\PaymentConfirmRequest;
 use App\Http\Services\Payments\ConfirmPayment\ConfirmPaymentService;
-use App\Http\Services\Payments\Factory\DTO\MakePaymentDTO;
-use App\Http\Services\Payments\Factory\PaymentFactory;
+use App\Http\Services\Payments\Order\NewOrderService;
 use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\JsonResponse;
+use Throwable;
+use Novikov7ua\Packagios\Payments\DTO\MakePaymentDTO;
+use Novikov7ua\Packagios\Payments\PaymentFactory;
+use Novikov7ua\Packagios\Enums\CurrencyEnum;
+use Novikov7ua\Packagios\Enums\PaymentsEnum;
 
 class PaymentController extends Controller
 {
 
     public function __construct(
         protected PaymentFactory $paymentFactory,
+        protected NewOrderService $newOrderService
     )
     {
     }
 
     /**
      * @throws BindingResolutionException
+     * @throws Throwable
      */
     public function createPayment(int $system): JsonResponse
     {
-
-        $paymentService = $this->paymentFactory->getInstance(PaymentsEnum::from($system));
+        $paymentService = $this->paymentFactory->getInstance(PaymentsEnum::from($system), config('payments'));
         $makePaymentDTO = new MakePaymentDTO(
             17.5,
-            CurrencyEnum::USD
+            CurrencyEnum::USD,
+            PaymentsEnum::from($system)
         );
         $orderId = $paymentService->createPayment($makePaymentDTO);
-        //$paymentService->makePayment($makePaymentDTO);
+        $makePaymentDTO->setOrderId($orderId);
+        $this->newOrderService->store($makePaymentDTO);
         return response()->json([
             'order' => [
                 'id'=>$orderId
@@ -42,7 +48,6 @@ class PaymentController extends Controller
     }
 
     /**
-     * @throws BindingResolutionException
      */
     public function confirmPayment(
         PaymentConfirmRequest $request,
@@ -51,7 +56,9 @@ class PaymentController extends Controller
     )
     {
         $data = $request->validated();
-        $confirmPaymentService->handle(PaymentsEnum::from($system), $data['paymentId']);
-
+        $result = $confirmPaymentService->handle(PaymentsEnum::from($system), $data['order_id']);
+        return response()->json([
+            'status' => $result->getPaymentData()->success,
+        ]);
     }
 }

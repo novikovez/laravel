@@ -17,9 +17,10 @@
             createOrder() {
                 return fetch("/api/payment/makePayment/1", {
                     method: "GET",
+                    data: "total: 10",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZTVkYWRlNzc5NWI3NTdmYWI5ODYzNTkwMWQ1N2VjYTQyNjI4ZTk4YWIwNTU3ZDNkOTZmYmM5ZWZhMjZmMjBhODdhYzk4YTQyZDg2NDk4NTgiLCJpYXQiOjE2OTEzNDQzMzMuNTQ0NzYsIm5iZiI6MTY5MTM0NDMzMy41NDQ3NywiZXhwIjoxNzIyOTY2NzMzLjUzNzIyNiwic3ViIjoiMiIsInNjb3BlcyI6W119.rwl1xmjxUOugo2_Ht8s7WcGFgn8ZZxgh_ES_XwJQs8tcTr9Zj5Oqoa6Gq1yn4_8klmgLmMjRfkxlZJGJHFCCcEmHURdMKAPpUNYNyovFbx-MfT5uXE_GuSE0d5SW65SJmGogpgilHecfcluoa4poj5soMfKYxTZYR4cRFW3viGXvE8sihE1wdwiicSOTYuYq6OrowLjp6v1MoklDDjNhcTAxFiyjn3vATgWGPSCblHNTF1edxWhh4bx5A-qj2wOKXr3AAC3Q4CY8xzDGcxlBj2dd5K2xjNrvyzos8utrJ84bK9szQAsREEh2P3faYK42ffLWdLFTvFvcR9d0Y4-gG3_ECImmgyYxKz9-GK-O2R0ohJKoZ0npqj0b3-ig1gVsEMq9ls-tP9JJArbUDIrws2Dk0W2kbIJlroz94lF68P6UfyWIR3fj4iSmjw-kAdki2Nonwntr_YF2-a2X39okj8HgkYqTzScE2nywYGiYUVESvKJ7OyNoYdilyeTwqUwDyJmGqdX7_aE3UIAH4DMU6N0QnuxUCoaYzGnGh0lfjorq6Gw4oBYYOSSQcB6UE6SY8QeoFAfpuaG9GjH_q3NbYvNdTiZ5CZ5UFkfs8L3kbHEyVN9895GT3uAN3R57wBhDPIpoyrTL9O2E39f1MbxGrq6mflIR9qkTlhyRZMuEnW0",
+                        "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNTViNWZkMTg3ZjEwMzBhNTMwNGIwZTRkMDllMDZjZTc3NGIzYmYzODk3ZjA5NzAzZTBlNTQzMzYyZDEyZmQ4MjRlOGQ4NWU2Y2I2NTc2YWQiLCJpYXQiOjE2OTI0NTk4MTguMDE4MzIzLCJuYmYiOjE2OTI0NTk4MTguMDE4MzM0LCJleHAiOjE3MjQwODIyMTguMDEzMiwic3ViIjoiMSIsInNjb3BlcyI6W119.mfyCF8deuKaYANqBJZISF-XwgvX3ISNwYVPDErzlyF12AUUlOart4KFf8fPozWzI0wrYZPx86kHRnoUIEjOOcgIscChMF9umQO-H8HrgrA4depksdRjmUUs6udL2A7FkJ_nGGbYrtRYIWZAr51_5hUnFfvThcSOFcBcqJuraOAWZVvi8vnP12JvRmW-vkxjq3Iip7b6Kr10cb4DMkzGtmnFMquTqVVMoGCqPARrGWRxPaGT4dGbaqBkPZnEPByE8Jmw2LNmuLqqVT63Ow4m_wApVQ6gWRMPCyx03gQoAOA98j-SUKTZheo8GBNkTaIqewvl2CsZcWtgp_ImTKDcvDj_kyFhmZEshYMsH5une8T4a1BEG37c8p_A0h5YURwzUgkxtc39sf118WRzIdZ0QtbIpbUAO7kKOjIDzgA6RMiqWzqI8uwqbNDbq7MwNYuHq7AL5qmYp2kwuLtfMhVl4DahxzAeWTaV_rZQCERZyBU34haLJ41NXGoPgCfkCBRedknSz0h_WNoqi0GHq-D7dLVhNJIXJz87Dfm6z8AedenoudiZ3wZFVCGoeSXUJDRNc3Qk9QNzj9c9xX7AwjNuSyv7UW0IzMqg6PEqW2UgHLTPg5bMlKcXr7kGHSuLUteYvVmkYZ2POh2RVx_BDipe2QagySqTDwVgNMci-JEnva1Y",
                     },
                 })
                     .then(function (response) {
@@ -37,9 +38,11 @@
     }
 
     function executePaypalPaymentOnBackend(paypalToken) {
-        axios.post('/api/payment/confirm/1', {paymentId: paypalToken}, {
+        axios.post('/api/payment/confirm/1', {order_id: paypalToken}, {
+            method: "POST",
             headers: {
-                "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIzIiwianRpIjoiZTVkYWRlNzc5NWI3NTdmYWI5ODYzNTkwMWQ1N2VjYTQyNjI4ZTk4YWIwNTU3ZDNkOTZmYmM5ZWZhMjZmMjBhODdhYzk4YTQyZDg2NDk4NTgiLCJpYXQiOjE2OTEzNDQzMzMuNTQ0NzYsIm5iZiI6MTY5MTM0NDMzMy41NDQ3NywiZXhwIjoxNzIyOTY2NzMzLjUzNzIyNiwic3ViIjoiMiIsInNjb3BlcyI6W119.rwl1xmjxUOugo2_Ht8s7WcGFgn8ZZxgh_ES_XwJQs8tcTr9Zj5Oqoa6Gq1yn4_8klmgLmMjRfkxlZJGJHFCCcEmHURdMKAPpUNYNyovFbx-MfT5uXE_GuSE0d5SW65SJmGogpgilHecfcluoa4poj5soMfKYxTZYR4cRFW3viGXvE8sihE1wdwiicSOTYuYq6OrowLjp6v1MoklDDjNhcTAxFiyjn3vATgWGPSCblHNTF1edxWhh4bx5A-qj2wOKXr3AAC3Q4CY8xzDGcxlBj2dd5K2xjNrvyzos8utrJ84bK9szQAsREEh2P3faYK42ffLWdLFTvFvcR9d0Y4-gG3_ECImmgyYxKz9-GK-O2R0ohJKoZ0npqj0b3-ig1gVsEMq9ls-tP9JJArbUDIrws2Dk0W2kbIJlroz94lF68P6UfyWIR3fj4iSmjw-kAdki2Nonwntr_YF2-a2X39okj8HgkYqTzScE2nywYGiYUVESvKJ7OyNoYdilyeTwqUwDyJmGqdX7_aE3UIAH4DMU6N0QnuxUCoaYzGnGh0lfjorq6Gw4oBYYOSSQcB6UE6SY8QeoFAfpuaG9GjH_q3NbYvNdTiZ5CZ5UFkfs8L3kbHEyVN9895GT3uAN3R57wBhDPIpoyrTL9O2E39f1MbxGrq6mflIR9qkTlhyRZMuEnW0",
+                "Content-Type": "application/json",
+                "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNTViNWZkMTg3ZjEwMzBhNTMwNGIwZTRkMDllMDZjZTc3NGIzYmYzODk3ZjA5NzAzZTBlNTQzMzYyZDEyZmQ4MjRlOGQ4NWU2Y2I2NTc2YWQiLCJpYXQiOjE2OTI0NTk4MTguMDE4MzIzLCJuYmYiOjE2OTI0NTk4MTguMDE4MzM0LCJleHAiOjE3MjQwODIyMTguMDEzMiwic3ViIjoiMSIsInNjb3BlcyI6W119.mfyCF8deuKaYANqBJZISF-XwgvX3ISNwYVPDErzlyF12AUUlOart4KFf8fPozWzI0wrYZPx86kHRnoUIEjOOcgIscChMF9umQO-H8HrgrA4depksdRjmUUs6udL2A7FkJ_nGGbYrtRYIWZAr51_5hUnFfvThcSOFcBcqJuraOAWZVvi8vnP12JvRmW-vkxjq3Iip7b6Kr10cb4DMkzGtmnFMquTqVVMoGCqPARrGWRxPaGT4dGbaqBkPZnEPByE8Jmw2LNmuLqqVT63Ow4m_wApVQ6gWRMPCyx03gQoAOA98j-SUKTZheo8GBNkTaIqewvl2CsZcWtgp_ImTKDcvDj_kyFhmZEshYMsH5une8T4a1BEG37c8p_A0h5YURwzUgkxtc39sf118WRzIdZ0QtbIpbUAO7kKOjIDzgA6RMiqWzqI8uwqbNDbq7MwNYuHq7AL5qmYp2kwuLtfMhVl4DahxzAeWTaV_rZQCERZyBU34haLJ41NXGoPgCfkCBRedknSz0h_WNoqi0GHq-D7dLVhNJIXJz87Dfm6z8AedenoudiZ3wZFVCGoeSXUJDRNc3Qk9QNzj9c9xX7AwjNuSyv7UW0IzMqg6PEqW2UgHLTPg5bMlKcXr7kGHSuLUteYvVmkYZ2POh2RVx_BDipe2QagySqTDwVgNMci-JEnva1Y",
             }
         })
             .then(function (response) {

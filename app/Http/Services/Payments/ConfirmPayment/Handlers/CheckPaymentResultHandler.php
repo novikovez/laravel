@@ -4,9 +4,10 @@ namespace App\Http\Services\Payments\ConfirmPayment\Handlers;
 
 use App\Http\Services\Payments\ConfirmPayment\confirmPaymentDTO;
 use App\Http\Services\Payments\ConfirmPayment\ConfirmPaymentInterface;
-use App\Http\Services\Payments\Factory\PaymentFactory;
+use Novikov7ua\Packagios\Payments\PaymentFactory;
 use Closure;
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Throwable;
 
 class CheckPaymentResultHandler implements ConfirmPaymentInterface
 {
@@ -17,14 +18,15 @@ class CheckPaymentResultHandler implements ConfirmPaymentInterface
     }
 
     /**
-     * @throws BindingResolutionException
+     * @throws BindingResolutionException|Throwable
      */
     public function handle(ConfirmPaymentDTO $confirmPaymentDTO, Closure $next)
     {
         $paymentService = $this->paymentFactory->getInstance(
-            $confirmPaymentDTO->getPaymentsEnum()
+            $confirmPaymentDTO->getPaymentsEnum(),
+            config('payments')
         );
-        $result = $paymentService->validatePayment($confirmPaymentDTO->getPaymentId());
+        $result = $paymentService->getPaymentInfo($confirmPaymentDTO->getOrderId());
         $confirmPaymentDTO->setPaymentData($result);
         return $next($confirmPaymentDTO);
     }

@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('user_id');
             $table->unsignedSmallInteger('payment_system');
-            $table->string('payment_id')->unique();
+            $table->string('payment_id')->unique()->nullable();
             $table->string('order_id');
-            $table->boolean('success');
             $table->unsignedSmallInteger('status');
             $table->unsignedFloat('amount');
             $table->unsignedSmallInteger('currency');
