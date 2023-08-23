@@ -8,6 +8,7 @@ use App\Http\Repositories\Category\CategoryRepository;
 use App\Http\Repositories\Category\Iterators\CategoryIterator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class AuthorServices
 {
@@ -29,7 +30,8 @@ class AuthorServices
      */
     public function showIterator(): AuthorsIterator
     {
-        return $this->authorRepository->showIterator();
-
+        return Cache::remember('authors', 60, function () {
+            return $this->authorRepository->showIterator();
+        });
     }
 }
