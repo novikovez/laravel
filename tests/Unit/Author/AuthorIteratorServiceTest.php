@@ -42,7 +42,7 @@ class AuthorIteratorServiceTest extends TestCase
                 ->willReturn($this->authorsIterator);
 
             $result = $this->service->showIterator();
-            $this->assertSame(true, $result instanceof AuthorsIterator);
+            $this->assertSame($this->authorsIterator, $result);
         }
     }
 
@@ -62,7 +62,7 @@ class AuthorIteratorServiceTest extends TestCase
                 ->method('showIterator');
 
             $result = $this->service->showIterator();
-            $this->assertSame(true, $result instanceof AuthorsIterator);
+            $this->assertSame($this->authorsIterator, $result);
         }
 
 
