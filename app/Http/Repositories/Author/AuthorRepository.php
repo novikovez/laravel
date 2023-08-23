@@ -43,7 +43,6 @@ class AuthorRepository
             ->whereBetween('authors.id', [0, 300])
             ->orderBy('authors.id', 'DESC')
             ->get();
-
         return new AuthorsIterator($result);
 
     }
