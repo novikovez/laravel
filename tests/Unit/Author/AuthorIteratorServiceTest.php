@@ -4,6 +4,7 @@ namespace Unit\Author;
 
 use App\Http\Repositories\Author\AuthorRepository;
 use App\Http\Repositories\Author\Iterators\AuthorsIterator;
+use App\Http\Services\Author\AuthorCacheService;
 use App\Http\Services\Author\AuthorServices;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\MockObject\Exception;
@@ -16,6 +17,7 @@ class AuthorIteratorServiceTest extends TestCase
     protected AuthorServices $service;
     protected MockObject $authorRepository;
     protected MockObject $authorsIterator;
+    protected MockObject $authorCacheService;
 
     /**
      * @throws Exception
@@ -25,7 +27,8 @@ class AuthorIteratorServiceTest extends TestCase
         parent::setUp();
         $this->authorRepository = $this->createMock(AuthorRepository::class);
         $this->authorsIterator = $this->createMock(AuthorsIterator::class);
-        $this->service = new AuthorServices($this->authorRepository);
+        $this->authorCacheService = $this->createMock(AuthorCacheService::class);
+        $this->service = new AuthorServices($this->authorRepository, $this->authorCacheService);
 
     }
 
@@ -34,16 +37,22 @@ class AuthorIteratorServiceTest extends TestCase
      */
     public function testAuthorCacheInValid(): void
     {
-        if(Cache::get('authors') === null)
-        {
-            $this->authorRepository
-                ->expects($this->once())
-                ->method('showIterator')
-                ->willReturn($this->authorsIterator);
+        $this->authorCacheService
+            ->expects($this->once())
+            ->method('getAuthorCache')
+            ->willReturn(null);
 
-            $result = $this->service->showIterator();
-            $this->assertSame($this->authorsIterator, $result);
-        }
+        $this->authorRepository
+            ->expects($this->once())
+            ->method('showIterator')
+            ->willReturn($this->authorsIterator);
+
+        $this->authorCacheService
+            ->expects($this->once())
+            ->method('setAuthorCache');
+
+        $result = $this->service->showIterator();
+        $this->assertSame($this->authorsIterator, $result);
     }
 
     /**
@@ -51,19 +60,21 @@ class AuthorIteratorServiceTest extends TestCase
      */
     public function testAuthorCacheValid(): void
     {
-        Cache::remember('authors', 60, function () {
-            return $this->authorsIterator;
-        });
+        $this->authorCacheService
+            ->expects($this->once())
+            ->method('getAuthorCache')
+            ->willReturn($this->authorsIterator);
 
-        if(Cache::get('authors'))
-        {
-            $this->authorRepository
-                ->expects($this->never())
-                ->method('showIterator');
+        $this->authorRepository
+            ->expects($this->never())
+            ->method('showIterator');
 
-            $result = $this->service->showIterator();
-            $this->assertSame($this->authorsIterator, $result);
-        }
+        $this->authorCacheService
+            ->expects($this->never())
+            ->method('setAuthorCache');
+
+        $result = $this->service->showIterator();
+        $this->assertSame($this->authorsIterator, $result);
 
 
     }
