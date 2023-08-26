@@ -5,6 +5,7 @@ use App\Http\Controllers\Book\BookController;
 use App\Http\Controllers\Category\CategoryController;
 use App\Http\Controllers\Payment\PaymentController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Middleware\UserRouteMiddleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +28,11 @@ Route::get('dz15/authors/iterator', [AuthorController::class, 'showIterator']);
 
 Route::middleware(['auth:api'])->group(
     function() {
+        Route::get('dz15/books/iterator', [BookController::class, 'showIterator'])
+            ->middleware(UserRouteMiddleware::class);
+        Route::get('dz15/authors/iterator', [AuthorController::class, 'showIterator'])
+            ->middleware(UserRouteMiddleware::class);
+
         Route::apiResource('/books', BookController::class);
         Route::get('/payment/makePayment/{system}', [PaymentController::class, 'createPayment']);
         Route::post('payment/confirm/{system}', [PaymentController::class, 'confirmPayment']);
