@@ -6,6 +6,7 @@ use App\Http\Repositories\Author\AuthorRepository;
 use App\Http\Repositories\Author\Iterators\AuthorsIterator;
 use App\Http\Repositories\Category\CategoryRepository;
 use App\Http\Repositories\Category\Iterators\CategoryIterator;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -14,7 +15,8 @@ class AuthorServices
 {
 
     public function __construct(
-        protected AuthorRepository $authorRepository
+        protected AuthorRepository $authorRepository,
+        protected AuthorCacheService $authorCacheService
     )
     {
     }
@@ -26,12 +28,17 @@ class AuthorServices
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function showIterator(): AuthorsIterator
     {
-        return Cache::remember('authors', 60, function () {
-            return $this->authorRepository->showIterator();
-        });
+        $cache = $this->authorCacheService->getAuthorCache('authors');
+        if($cache === null)
+        {
+            $data = $this->authorRepository->showIterator();
+            $this->authorCacheService->setAuthorCache($data, 'authors');
+            return $data;
+        }
+        return $cache;
     }
 }
