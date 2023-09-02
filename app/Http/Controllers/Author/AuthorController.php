@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Author;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Author\AuthorShowIteratorRequest;
 use App\Http\Requests\Category\CategoryDestroyRequest;
 use App\Http\Requests\Category\CategoryShowRequest;
 use App\Http\Requests\Category\CategoryStoreRequest;
@@ -37,9 +38,10 @@ class AuthorController extends Controller
     /**
      * @throws \Exception
      */
-    public function showIterator(): AnonymousResourceCollection
+    public function showIterator(AuthorShowIteratorRequest $request): AnonymousResourceCollection
     {
-        $result = $this->authorServices->showIterator();
+        $data = $request->validated();
+        $result = $this->authorServices->showIterator($data['last_id']);
         return AuthorResourceIterator::collection($result->getIterator()->getArrayCopy());
     }
 }

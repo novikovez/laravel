@@ -32,9 +32,6 @@ class RedisPublish extends Command
             $this->ask("Як Вас звати?"),
             $this->ask("Скільки вам років?")
         );
-
-        Redis::publish('test', json_encode([
-            $dto->jsonSerialize()
-        ]));
+        Redis::publish('test', json_encode($dto));
     }
 }

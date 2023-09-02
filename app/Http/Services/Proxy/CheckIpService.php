@@ -8,9 +8,14 @@ use Illuminate\Support\Facades\Redis;
 
 class CheckIpService
 {
+
+    protected const PROXY_COUNT_NEW_LIST = 5;
+    protected const PROXY_MAX_EX_TIME = 1;
+    protected const PROXY_API_URL = 'https://api.myip.com/';
     public function  __construct(
         protected Client $client,
-        protected WebProxyService $webProxyService
+        protected WebProxyService $webProxyService,
+        protected ProxyStorage $proxyStorage
     )
     {
     }
@@ -20,16 +25,15 @@ class CheckIpService
      */
     public function getMyIp(): string
     {
-        $proxy = json_decode($this->checkRedisProxies(), true);
-        $authData = $proxy['username'] . ':' . $proxy['password'];
+        $proxy = $this->proxyStorage->lpop();
         $start = microtime(true);
-        $response = $this->client->get('https://api.myip.com/',
+        $response = $this->client->get(self::PROXY_API_URL,
             [
-                "proxy" => "http://" . $authData . '@' . $proxy['ip'] . ":" . $proxy['port'],
+                "proxy" => $proxy->getData(),
             ]);
 
         $count = $this->checkResultTime($start, $proxy);
-        if($count < 5)
+        if($count < self::PROXY_COUNT_NEW_LIST)
         {
             $this->newListProxy();
         }
@@ -39,11 +43,11 @@ class CheckIpService
     private function checkResultTime($start, $proxy): int
     {
        $result = microtime(true) - $start;
-       if($result < 1)
+       if($result < self::PROXY_MAX_EX_TIME)
        {
-           return Redis::rpush('proxies', json_encode($proxy));
+           $this->proxyStorage->rpush($proxy);
        }
-       return Redis::llen('proxies');
+       return $this->proxyStorage->llen();
     }
 
     /**
@@ -51,21 +55,8 @@ class CheckIpService
      */
     private function newListProxy(): void
     {
-        Redis::del('proxies');
+        $this->proxyStorage->del();
         $this->webProxyService->getProxyList();
     }
 
-    /**
-     * @throws GuzzleException
-     */
-    private function checkRedisProxies(): string
-    {
-        $cache = Redis::lpop('proxies');
-        if($cache === null)
-        {
-            $this->webProxyService->getProxyList();
-            return Redis::lpop('proxies');
-        }
-        return $cache;
-    }
 }
