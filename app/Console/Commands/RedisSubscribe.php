@@ -30,8 +30,8 @@ class RedisSubscribe extends Command
         Redis::subscribe(['test'], function (string $message) {
             $data = json_decode($message);
             $dto = new RedisTestDTO(
-                $data[0]->name,
-                $data[0]->year
+                $data->name,
+                $data->year
             );
            $this->info('Імя: '. $dto->getName());
            $this->info('Вік: '. $dto->getYear());

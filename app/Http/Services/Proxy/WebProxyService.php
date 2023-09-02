@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\Redis;
 class WebProxyService
 {
     public function __construct(
-        protected Client $client
+        protected Client $client,
+        protected ProxyStorage $proxyStorage
     ) {
     }
 
@@ -37,7 +38,7 @@ class WebProxyService
                 "ip" => $item->proxy_address,
                 "port" => $item->port,
             ];
-            Redis::lpush('proxies', json_encode($proxy));
+            $this->proxyStorage->lpush(new ProxyDTO(...$proxy));
         }
     }
 }

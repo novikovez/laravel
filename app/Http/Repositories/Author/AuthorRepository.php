@@ -26,7 +26,7 @@ class AuthorRepository
     /**
      * @throws \Exception
      */
-    public function showIterator(): AuthorsIterator
+    public function showIterator(int $last_id): AuthorsIterator
     {
         $result = DB::table('authors')
             ->select([
@@ -40,7 +40,8 @@ class AuthorRepository
             ])
             ->join('author_book', 'author_id', '=', 'authors.id')
             ->join('books', 'books.id', '=', 'author_book.book_id')
-            ->whereBetween('authors.id', [0, 300])
+            ->where('authors.id', '>', $last_id)
+            ->limit(100)
             ->orderBy('authors.id', 'DESC')
             ->get();
         return new AuthorsIterator($result);

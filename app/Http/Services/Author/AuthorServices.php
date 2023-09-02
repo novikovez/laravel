@@ -16,7 +16,7 @@ class AuthorServices
 
     public function __construct(
         protected AuthorRepository $authorRepository,
-        protected AuthorCacheService $authorCacheService
+        protected AuthorStorage $authorStorage
     )
     {
     }
@@ -30,15 +30,14 @@ class AuthorServices
     /**
      * @throws Exception
      */
-    public function showIterator(): AuthorsIterator
+    public function showIterator(int $last_id): AuthorsIterator
     {
-        $cache = $this->authorCacheService->getAuthorCache('authors');
-        if($cache === null)
+        if($this->authorStorage->has($last_id) === false)
         {
-            $data = $this->authorRepository->showIterator();
-            $this->authorCacheService->setAuthorCache($data, 'authors');
+            $data = $this->authorRepository->showIterator($last_id);
+            $this->authorStorage->set($data, $last_id);
             return $data;
         }
-        return $cache;
+        return $this->authorStorage->get($last_id);
     }
 }
