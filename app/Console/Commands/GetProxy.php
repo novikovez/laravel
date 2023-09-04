@@ -2,9 +2,12 @@
 
 namespace App\Console\Commands;
 
+use App\Exceptions\WebshareStatusCode;
 use App\Http\Services\Proxy\WebProxyService;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class GetProxy extends Command
 {
@@ -28,6 +31,12 @@ class GetProxy extends Command
      */
     public function handle(WebProxyService $webProxy): void
     {
-        $webProxy->getProxyList();
+        try {
+            $webProxy->getProxyList();
+            Log::info('Список проксі оновлено');
+
+        } catch (WebshareStatusCode|ConnectException $exception) {
+            $this->info($exception->getMessage());
+        }
     }
 }

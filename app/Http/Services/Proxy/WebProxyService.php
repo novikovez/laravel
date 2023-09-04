@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\Proxy;
 
+use App\Exceptions\WebshareStatusCode;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Redis;
@@ -16,6 +17,7 @@ class WebProxyService
 
     /**
      * @throws GuzzleException
+     * @throws WebshareStatusCode
      */
     public function getProxyList(): void
     {
@@ -29,7 +31,14 @@ class WebProxyService
                 "Authorization" => config('proxy.key')
             ]
         ]);
+
+        if($response->getStatusCode() !== 200)
+        {
+            throw new WebshareStatusCode('Webshare Bad Status');
+        }
+
         $data = $response->getBody()->getContents();
+        $this->proxyStorage->del();
 
         foreach (json_decode($data)->results as $item) {
             $proxy = [
