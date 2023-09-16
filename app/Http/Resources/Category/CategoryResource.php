@@ -22,9 +22,9 @@ class CategoryResource extends JsonResource
         /** @var CategoryIterator $resource */
         $resource = $this->resource;
         return [
-            'category_id' => $resource['category']->getId(),
-            'category_name' => $resource['category']->getName(),
-            'books' => BookResource::collection($resource->getBooksIterator()->getIterator()->getArrayCopy())
+            'category_id' => $resource->getId(),
+            'category_name' => $resource->getName(),
+           // 'books' => BookResource::collection($resource->getBooksIterator()->getIterator()->getArrayCopy())
         ];
     }
 }

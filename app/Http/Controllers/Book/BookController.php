@@ -60,6 +60,7 @@ class BookController extends Controller
                         LangEnum::from($data['lang']),
                         $data['pages'],
                         $data['category_id'],
+                        $data['author_id'],
                     )
                 )
             )

@@ -7,6 +7,7 @@ use Exception;
 use fXmlRpc\Transport\HttpAdapterTransport;
 use GuzzleHttp\Client;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
+use Illuminate\Support\Facades\File;
 use Supervisor\Configuration\Loader\IniFileLoader;
 use Supervisor\Configuration\Section\Program;
 use Supervisor\Configuration\Writer\IniFileWriter;
@@ -112,10 +113,10 @@ class SupervisorService
             if ($config->hasSection(self::PREFIX . $processName) === false) {
                 return;
             }
-            var_dump(self::PREFIX . $processName);
             $config->removeSection(self::PREFIX . $processName);
             (new IniFileWriter($filePath))->write($config);
             $this->supervisor->reloadConfig();
+            File::put($filePath, ' ');
         } catch (Exception $exception) {
         }
     }
@@ -143,6 +144,7 @@ class SupervisorService
             $config->addSection($section);
             (new IniFileWriter($filePath))->write($config);
             $this->supervisor->reloadConfig();
+
         } catch (Exception $exception) {
         }
     }
