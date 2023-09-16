@@ -1,46 +1,27 @@
 <?php
 
-namespace App\Http\Repositories\Book;
+namespace App\Http\Services\Rabbit\Messages;
 
-use App\Enum\LangEnum;
 use JsonSerializable;
 
-class BookStoreDTO implements JsonSerializable
+class BookCreateDTO  implements JsonSerializable
 {
     public function __construct(
         protected string $name,
         protected int $year,
         protected string $lang,
         protected int $pages,
-        protected int $category_id,
+        protected int $categoryId,
         protected int $author_id,
-    ) {
-    }
-
-    public function getAuthorId(): int
+    )
     {
-        return $this->author_id;
     }
 
-    /**
-     * @return int
-     */
-    public function getCategoryId(): int
-    {
-        return $this->category_id;
-    }
-
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return int
-     */
     public function getYear(): int
     {
         return $this->year;
@@ -51,12 +32,19 @@ class BookStoreDTO implements JsonSerializable
         return $this->lang;
     }
 
-    /**
-     * @return int
-     */
     public function getPages(): int
     {
         return $this->pages;
+    }
+
+    public function getCategoryId(): int
+    {
+        return $this->categoryId;
+    }
+
+    public function getAuthorId(): int
+    {
+        return $this->author_id;
     }
 
     public function jsonSerialize(): array
@@ -66,7 +54,7 @@ class BookStoreDTO implements JsonSerializable
             'year' => $this->year,
             'lang' => $this->lang,
             'pages' => $this->pages,
-            'category_id' => $this->category_id,
+            'category_id' => $this->categoryId,
             'author_id' => $this->author_id,
         ];
     }

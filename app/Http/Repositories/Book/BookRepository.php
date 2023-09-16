@@ -46,7 +46,7 @@ class BookRepository
 
     public function store(BookStoreDTO $bookStoreDTO): int
     {
-        return DB::table('books')
+        $bookId = DB::table('books')
             ->insertGetId([
                 "name" => $bookStoreDTO->getName(),
                 "year" => $bookStoreDTO->getYear(),
@@ -55,6 +55,14 @@ class BookRepository
                 "category_id" => $bookStoreDTO->getCategoryId(),
                 "created_at" => NOW()
             ]);
+
+        DB::table('author_book')
+            ->insert([
+                "author_id" => $bookStoreDTO->getAuthorId(),
+                "book_id" => $bookId
+            ]);
+
+        return $bookId;
     }
 
     public function show(int $id): BookIterator
@@ -69,9 +77,13 @@ class BookRepository
                     "books.created_at",
                     "category_id",
                     "categories.name as category_name",
+                    "author_book.author_id",
+                    "authors.author",
                 ]
             )
             ->join('categories', 'categories.id', '=', 'books.category_id')
+            ->join('author_book', 'book_id', '=', 'books.id')
+            ->join('authors', 'authors.id', '=', 'author_book.author_id')
             ->where('books.id', '=', $id)
             ->first());
     }

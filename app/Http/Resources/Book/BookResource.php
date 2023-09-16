@@ -18,15 +18,16 @@ class BookResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        /** @var Book $resource */
+        /** @var BookIterator $resource */
         $resource = $this->resource;
         return [
-            'id' => $resource->id,
-            'name' => $resource->name,
-            'year' => $resource->year,
-            'lang' => $resource->lang,
-            'pages' => $resource->pages,
-            'author' => AuthorResource::collection($resource->author),
+            'id' => $resource->getId(),
+            'name' => $resource->getName(),
+            'year' => $resource->getYear(),
+            'lang' => $resource->getLang(),
+            'pages' => $resource->getPages(),
+            'category' => new CategoryResource($resource->getCategoryIterator()),
+            'author' => new AuthorResource($resource->getAuthorIterator()),
         ];
     }
 }

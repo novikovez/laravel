@@ -12,3 +12,5 @@ Route::get('/payment_paypal', function () {
 Route::get('/payment_liqpay', function () {
     return view('payment_liqpay');
 });
+
+

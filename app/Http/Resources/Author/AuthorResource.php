@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Author;
 
+use App\Http\Repositories\Author\Iterators\AuthorIterator;
 use App\Http\Repositories\Category\Iterators\CategoryIterator;
 use App\Models\Author;
 use Illuminate\Http\Request;
@@ -16,11 +17,11 @@ class AuthorResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        /** @var Author $resource */
+        /** @var AuthorIterator $resource */
         $resource = $this->resource;
         return [
-            'id' => $resource->id,
-            'name' => $resource->author
+            'id' => $resource->getId(),
+            'name' => $resource->getName()
         ];
     }
 }

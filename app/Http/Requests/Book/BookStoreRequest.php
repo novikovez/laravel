@@ -23,6 +23,7 @@ class BookStoreRequest extends FormRequest
             "lang" => ["required", "string", "max:2", Rule::enum(LangEnum::class)],
             'pages' => ['required', 'integer', 'max:55000', 'min:10'],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'author_id' => ['required', 'integer', 'exists:authors,id'],
         ];
     }
 
